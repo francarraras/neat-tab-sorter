@@ -1,20 +1,35 @@
 {
     "name": "Simple Tab Sorter",
     "description": "Simple tab sorter that allows user-defined tab group order.",
-    "version": "0.4.2",
+    "version": "0.5.0",
     "manifest_version": 3,
-    "permissions": ["tabs", "tabGroups", "storage"],
+    "minimum_chrome_version": "102",
+    "permissions": ["tabs", "tabGroups", "storage", "contextMenus"],
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "background.js",
+        "type": "module"
     },
     "action": {
-        "default_title": "Simple Tab Sorter",
-        "default_popup": "./popup.html",
-        "default_icons": {
-            "128": "img/128.png",
+        "default_title": "Sort tabs (right-click for undo and sort options)",
+        "default_icon": {
+            "16": "img/16.png",
             "48": "img/48.png",
-            "16": "img/16.png"
+            "128": "img/128.png"
         }
     },
-    "options_page": "./options.html"
+    "icons": {
+        "16": "img/16.png",
+        "48": "img/48.png",
+        "128": "img/128.png"
+    },
+    "commands": {
+        "_execute_action": {
+            "suggested_key": { "default": "Alt+Shift+S" },
+            "description": "Sort tabs in the current window"
+        },
+        "undo-sort": {
+            "description": "Undo the last sort in the current window"
+        }
+    },
+    "options_page": "options.html"
 }

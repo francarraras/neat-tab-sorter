@@ -3,136 +3,109 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Peter White">
     <title>Simple Tab Sorter: User Guide</title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="bootstrap.min.css"/>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="icon" href="img/16.png">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="container bg-light">
-        <h3 class="navbar-brand h3">Simple Tab Sorter</h3>
-    </div>
-    <div class="container">
-        <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="options.html">Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">User Guide</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="about.html">About</a>
-                        </li>
-                    </ul>
-                </div>
+    <header class="masthead">
+        <div class="wrap">
+            <a class="brand" href="options.html"><img src="img/48.png" alt="">Simple Tab Sorter <span class="version" data-version></span></a>
+            <nav aria-label="Pages">
+                <a href="options.html">Settings</a>
+                <a href="userguide.html" aria-current="page">User Guide</a>
+                <a href="about.html">About</a>
             </nav>
-
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                <div class="table">
-                    <table class="table table-md">
-                        <tbody>
-                            <tr class="row justify-content-start">
-                                <td colspan="col-md-2"><h3>User Guide (<span id="version"></span>)</h3></td>
-                            </tr>
-                            <tr class="row justify-content-start mt-n4">
-                                <td class="col-md-12">
-                                    <p>Thanks for taking the time to read this page. Doing so will, hopefully, save you time and improve your experience with this extension!
-                                        Please refer back to this page after receiving updates because behavioral changes may be introduced as a result of any bug fixes or enhancement requests.
-                                    </p>
-                                    <h4>Simple Tab Sorter or Super Tab Sorter - which one's right for you?</h4>
-                                    <p>
-                                        Simple Tab Sorter has grown in complexity since its initial release, as a result of user feedback (which is greatly appreciated) and significant changes made to the Chrome browser and API (no so much). It's reached the point 
-                                        where it doesn't feel as "Simple" as I had intially intended and I'm having to say "No" to feature requests that conflict with my design goals of being "Simple" and lightweight.
-                                    </p>
-                                    <p>
-                                        I created <a href="https://chromewebstore.google.com/detail/super-tab-sorter/jjhppbooocacaccnhjninhmigbfmpnkh" target="_blank">Super Tab Sorter</a>, a trustworthy alternative to Simple Tab Sorter for people who want more functionality and customization, even if that means additional complexity and resource consumption.
-                                    </p>
-                                    <p>
-                                        If you want something simple and light weight, that will remain that way, you'll probably be happier with Simple Tab Sorter. Simple Tab Sorter has entered "maintenance mode" and Super Tab Sorter is where I plan on adding functionality.
-                                    </p>
-                                    <h4>Tab Group Behavior (New in v0.4.0)</h4>
-                                    <p>Simple Tab Sorter officially supports Chrome's <a href="https://blog.google/products/chrome/manage-tabs-with-google-chrome/" target="_blank">Tab Groups</a> as of v0.4.0.
-                                        Tab Groups will be relocated to the left off all ungrouped tabs, in alphabetical title order, and their contents will be sorted using the same settings as ungrouped tabs.
-                                        <ol class="alert alert-primary">
-                                        If you wish to override the tab group order, I suggest naming your tabs with a numeric prefix that indicates your desired sort order. e.g., "1. Shopping", "2. Learning", "3. Work", etc.
-                                        </ol>  
-                                    </p>
-                                    <h4>Planned removal of Sort By Custom (v0.5.0)</h4>
-                                    <p>
-                                        In my opinion, the introduction of Chrome's Tab Groups has lessoned the need for "Sort By Custom (SBC)".  I think SBC has its place, for more demanding users, but I believe that users most likely to want SBC are more likely to use Super Tab Sorter. For that reason, Sort By Custom will remain
-                                        a sort option in <a href="https://chromewebstore.google.com/detail/super-tab-sorter/jjhppbooocacaccnhjninhmigbfmpnkh" target="_blank">Super Tab Sorter</a> and be removed from Simple Tab Sorter to minimize complexity and potential user confusion.
-                                    </p>
-                                    <h4>General Usage and Behavior</h4>
-                                    <p>Regardless of the settings you choose, it's important to understand the following 2 things:
-                                        <ol class="alert alert-primary">
-                                            <li><strong>Tabs will only be sorted when Simple Tab Sorter's icon is clicked.</strong></li>
-                                            <li><strong>Tabs will only be sorted in the browser window where the icon is clicked.</strong></li>
-                                        </ol>  
-                                        With this in mind, you can safely experiment with different sort options, without reshuffling all the tabs in your main window,
-                                        by opening several tabs in a new browser window and experimenting with the sort options in that window. Please note that extension settings are global,
-                                        so any setting changes you save will be applied to all open windows when you click the Simple Tab Sorter icon later.
-                                    </p>
-                                    <h4>Setting Explanations</h4>
-                                    <h5>Sort By</h5>
-                                    <p>You can sort by Title, URL, or Custom. Only <em>Sort by Custom</em>'s behavior is affected by the "<em>Group From</em>" and "<em>Preserve order within groups</em>"
-                                    settings. <em>Sort by Title</em> and <em>Sort by URL</em> ignore those settings and sort strictly by localized page <em>Title</em> or <em>URL</em> in ascending order.
-                                    All <em>Sort By</em> options support the "<em>Group suspended tabs together</em>" setting, which groups all suspended tabs to the left side of your browser window.</p>
-                                    <h5>Sort pinned tabs</h5>
-                                    <p>
-                                        Simple Tab Sorter <b>ignores</b> pinned tabs by default. If you check the box, pinned tabs will remain grouped together but will be sub-sorted by the same criteria used to sort the rest of your tabs.
-                                    </p>
-                                    <h5>Group suspended tabs together (applicable if using an extension derived from The Great Suspender)</h5>
-                                    <p>Other tab sorting extensions that I've used have grouped all tabs suspended by The Great Suspender together, because The Great Suspender modifies the URL of
-                                        suspended tabs and retains the original URL as a query parameter. I was a major fan of the original The Great Suspender (before the transfer of ownership), but have found that sorting behavior annoying, which was one of my primary
-                                        reasons for creating Simple Tab Sorter.
-                                    </p>
-                                    <p>
-                                        By default, Simple Tab Sorter <strong>will not</strong> <em>Group suspended tabs together</em> - your suspended tabs will be sorted as if they were unsuspended. If you check the box,
-                                        all suspended tabs will be shifted to the far left side of your browser and maintain their relative position to each other unless "<em>Preserve order within groups</em>" is <strong>deselected</strong>,
-                                        in which case the suspended tabs will be subsorted by URL.
-                                    </p>
-                                    <h6>Tab suspender extension id (required if "Group suspended tabs together" is unchecked)</h6>
-                                    Look at the URL in your browser's address bar, for any suspended tab, and you should see something similar to the following...
-                                    <div class="code">
-                                        chrome-extension://<mark>noogafoofpebimajpfpamcfhoaifemoa</mark>/suspended.html#ttl=Google&pos=0&uri=https://www.google.com/
-                                    </div>
-                                    <p></p>
-                                    The example above shows the URL for a suspended "https://www.google.com/" tab that was suspended by <a href="https://chromewebstore.google.com/detail/the-marvellous-suspender/noogafoofpebimajpfpamcfhoaifemoa" target="_blank">The Marvellous Suspender</a> (the de facto The Great Suspender successor) extension.
-                                    The highlighted  portion between <i>chrome-extension://</i> and <i>/suspended.html</i> is the "extension id" that you should copy/paste into the input field directly below "Group suspended tabs together" in the
-                                    <a href="options.html">Settings</a> page - don't forget to click Save!
-
-                                    <p></p>
-                                    <p>Please note that <a href="https://chromewebstore.google.com/detail/the-marvellous-suspender/noogafoofpebimajpfpamcfhoaifemoa" target="_blank">The Marvellous Suspender</a>'s extension id will appear in the "Tab suspender extension id"
-                                        field until you change and save the value in that field. This value can be safely ignored if you're not using The Marvellous Suspender or an extension with a compatible URL convention.
-                                    </p>
-                                    <p></p>
-                                    <h5>Group From (<em>Sort by Custom</em> only)</h5>
-                                    <p>This setting is used to determine whether the first instance of a "tab group" should be identified in order from "<em>Left to Right</em>" or "<em>Right to Left</em>".
-                                        <strong>This allows people to quickly, and easily, determine their desired "tab group" order by manually rearranging only a handful of tabs before clicking on the Simple Tab Sorter icon</strong>.
-                                    </p>
-                                    <p>While this may seem unusual, at first, I encourage you to experiment with <em>Sort by Custom</em> and this setting for a while - I think it will quickly grow on you if you're
-                                        not a fan from the start.
-                                    </p>
-                                    <h5>Preserve order within groups (<em>Sort by Custom</em> only)</h5>
-                                    <p>The default behavior of this extension is to preserve the pre-sorted order of tabs within the sorted tab groups. I find this preferable to sorting everything
-                                        by <em>Title</em> or <em>URL</em>, but included this as an option for others who prefer to have everything sorted alphabetically. If deselected, tabs will be subsorted by URL.</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </main>
         </div>
-    </div>
-    <script src="jquery-3.7.1.slim.min.js"></script>
-    <script src="bootstrap.min.js"></script>
-    <script src="version.js"></script
+    </header>
+
+    <main class="wrap prose">
+        <h1>User Guide</h1>
+        <p>Thanks for taking the time to read this page. Doing so will, hopefully, save you time and improve your experience with this extension!
+            Please refer back to this page after receiving updates because behavioral changes may be introduced as a result of any bug fixes or enhancement requests.</p>
+
+        <div class="note">
+            <p><strong>Click the Simple Tab Sorter icon, or press <span data-shortcut="_execute_action"></span>, to sort your tabs.</strong>
+                Only the window you're in is sorted, and tabs are only ever moved: nothing is closed, reloaded, ungrouped or unpinned.</p>
+            <p><strong>Changed your mind? Right-click the icon and choose <em>Undo last sort</em>.</strong>
+                Each window remembers the order it had before its last sort until you close it or restart your browser.
+                You can also give undo a keyboard shortcut (currently <span data-shortcut="undo-sort"></span>) on the <a href="#" data-open-shortcuts>shortcuts page</a>.</p>
+        </div>
+        <p>The icon's right-click menu also lets you sort a different way: picking a sort order sorts the window right away and makes that order the default.
+            If the icon isn't in your toolbar, click the puzzle-piece Extensions button and pin Simple Tab Sorter.</p>
+
+        <h2>What's new in v0.5.0</h2>
+        <ul>
+            <li><strong>Faster, steadier sorting.</strong> There's no popup to load anymore, and only the tabs that are out of place are moved, so sorting an already-sorted window doesn't move anything.</li>
+            <li><strong>Undo</strong> and <strong>keyboard shortcuts</strong>.</li>
+            <li><strong>Natural number order:</strong> "Episode 2" comes before "Episode 10", and <code>…/issues/2</code> before <code>…/issues/19</code>. Upper and lower case are treated the same.</li>
+            <li><strong>Recently used</strong> sort order.</li>
+            <li><strong>Tab group options:</strong> keep your own group order, or leave the tabs inside your groups alone.</li>
+            <li>Suspended tabs are detected automatically, so there's no extension id to configure.</li>
+            <li>Tabs in a split view stay together.</li>
+            <li>Lighter settings pages that save as you go and follow your system's dark mode.</li>
+        </ul>
+
+        <h2>Simple Tab Sorter or Super Tab Sorter: which one's right for you?</h2>
+        <p>Simple Tab Sorter has grown in complexity since its initial release, as a result of user feedback (which is greatly appreciated) and significant changes made to the Chrome browser and API (not so much).
+            It's reached the point where it doesn't feel as "Simple" as I had initially intended and I'm having to say "No" to feature requests that conflict with my design goals of being "Simple" and lightweight.</p>
+        <p>I created <a href="https://chromewebstore.google.com/detail/super-tab-sorter/jjhppbooocacaccnhjninhmigbfmpnkh" target="_blank">Super Tab Sorter</a>, a trustworthy alternative to Simple Tab Sorter for people who want more functionality and customization, even if that means additional complexity and resource consumption.</p>
+        <p>If you want something simple and lightweight, that will remain that way, you'll probably be happier with Simple Tab Sorter.</p>
+
+        <h2>Tab groups</h2>
+        <p>Chrome's <a href="https://blog.google/products/chrome/manage-tabs-with-google-chrome/" target="_blank">tab groups</a> are always kept intact and placed to the left of all ungrouped tabs.
+            By default, groups are put in alphabetical order by name and the tabs inside them are sorted with the same settings as ungrouped tabs.</p>
+        <ul>
+            <li><strong>To choose the order of your groups, number them:</strong> "1. Work", "2. Shopping", "10. Later". Numbers sort naturally, so 10 comes after 2. Groups without a name go after the named ones.</li>
+            <li>Turn off <em>Sort tab groups by name</em> to keep your groups in their current order.</li>
+            <li>Turn off <em>Sort tabs inside tab groups</em> to leave the tabs in your groups exactly where they are and only sort your ungrouped tabs.</li>
+        </ul>
+
+        <h3>Split view</h3>
+        <p>Chrome ends a split view when one of its tabs is moved away from the other, so tabs in a split view are never moved. Instead, the other tabs are sorted around them.</p>
+
+        <h2>Settings</h2>
+        <h3>Sort tabs by</h3>
+        <ul>
+            <li><strong>Title</strong>: alphabetical by page title. Unread counters at the start of a title, like "(3) Inbox", are ignored, so tabs don't move around as the count changes.</li>
+            <li><strong>URL</strong>: alphabetical by address, ignoring the protocol and a leading "www.", so www.example.com sorts together with example.com.</li>
+            <li><strong>Custom (group by site)</strong>: keeps tabs from the same site together without putting the sites in alphabetical order. See <a href="#custom-sort">Custom sort</a> below.</li>
+            <li><strong>Recently used</strong>: the tabs you used most recently come first.</li>
+        </ul>
+        <p>Every sort order compares numbers naturally and leaves tabs that tie exactly where they are, relative to each other.</p>
+
+        <h3>Sort pinned tabs</h3>
+        <p>Simple Tab Sorter <strong>ignores</strong> pinned tabs by default. If you check the box, pinned tabs will remain grouped together but will be sub-sorted by the same criteria used to sort the rest of your tabs.</p>
+
+        <h3>Group suspended tabs together</h3>
+        <p>Tab suspenders derived from The Great Suspender, like <a href="https://chromewebstore.google.com/detail/the-marvellous-suspender/noogafoofpebimajpfpamcfhoaifemoa" target="_blank">The Marvellous Suspender</a>, change the URL of each tab they suspend and keep the original URL inside it:</p>
+        <div class="code">chrome-extension://noogafoofpebimajpfpamcfhoaifemoa/suspended.html#ttl=Google&amp;pos=0&amp;uri=<mark>https://www.google.com/</mark></div>
+        <p>Other tab sorting extensions that I've used group all of these suspended tabs together, which I found annoying and was one of my primary reasons for creating Simple Tab Sorter.
+            By default, Simple Tab Sorter <strong>does not</strong> group suspended tabs together: they're sorted by their original URL, as if they weren't suspended.
+            If you check the box, suspended tabs are moved to the left (of each tab group, and of your ungrouped tabs) and sorted among themselves.</p>
+        <p>Suspended tabs are recognized automatically for any extension that uses this URL format, so there's no extension id to configure anymore.
+            Chrome's built-in Memory Saver doesn't change URLs, so tabs it puts to sleep are always sorted normally.</p>
+
+        <h3 id="custom-sort">Custom sort</h3>
+        <p>Custom sort gathers the tabs from each site (for example, every <code>github.com</code> tab) into a block, but instead of putting the blocks in alphabetical order, it keeps them in the order the sites already appear in.
+            <strong>This allows you to quickly, and easily, choose the order of your sites by manually rearranging only a handful of tabs before clicking the Simple Tab Sorter icon.</strong>
+            While this may seem unusual at first, I encourage you to experiment with it for a while. I think it will quickly grow on you.</p>
+        <ul>
+            <li><strong>Group from</strong>: with <em>Left to right</em>, sites are ordered by their leftmost tab. With <em>Right to left</em>, they're ordered by their rightmost tab instead, so a site you've just opened a new tab for moves to the end.</li>
+            <li><strong>Preserve order within groups</strong>: tabs from the same site keep their current order (the default). If deselected, they're sorted by URL.</li>
+        </ul>
+
+        <h2>Tips</h2>
+        <ul>
+            <li>Want to experiment? Undo puts everything back, or you can open a few tabs in a new window and try different settings there.</li>
+            <li>Settings are saved as soon as you change them and are synced with your browser profile, so they apply in every window.</li>
+        </ul>
+    </main>
+
+    <script type="module" src="page.js"></script>
 </body>
 
 </html>

@@ -4,11 +4,15 @@
 
 "Simple Tab Sorter" is a free and open-source Google Chrome extension for people who want quick and easy user-customizable tab sorting and grouping.
 
-In addition to standard URL or title-based sorting, its "killer features" are:
+Click its toolbar icon, or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>, to sort the current window. Right-click the icon to undo the last sort or to sort a different way.
 
-1. Respects Google Chrome's Tab Groups.
+In addition to standard URL, title or recently-used sorting, its "killer features" are:
+
+1. Respects Google Chrome's Tab Groups (and split views): groups always stay intact, sorted by name or kept in your own order.
 2. User configurable sort behavior for handling tabs suspended by extensions forked from [The Great Suspender](https://github.com/greatsuspender/thegreatsuspender).
-3. Simple manual override of tab group sort order. 
+3. Simple manual override of tab group sort order.
+4. Undo, plus natural number order ("Episode 2" before "Episode 10").
+5. Only tabs that are out of place are moved, so sorting is quick and an already-sorted window doesn't change.
 
 ### Bugs / Feature Requests
 
@@ -31,9 +35,21 @@ Please note that the webstore version may lag behind the latest version found he
 1. Download and extract the **[latest available release](https://github.com/pwhite2/simple-tab-sorter/releases)**, or clone this repo (if you enjoy living on the edge), to your preferred location.
 2. In any **Google Chrome** compatible browser, navigate to "chrome://extensions" and enable "Developer mode" in the upper right corner.
 3. Click the <kbd>Load unpacked</kbd> button.
-4. Browse to the **src** directory of the extracted folder, or cloned reop, and select or confirm (the terminology may be browser dependent).
+4. Browse to the **src** directory of the extracted folder, or cloned repo, and select or confirm (the terminology may be browser dependent).
 
 Once you have completed the above steps, you should see the <img src="src/img/128.png" width="16px"/> icon in your browser toolbar, indicating successful installation of the extension.
+
+### Development
+
+The sorting logic lives in `src/sort.js` and doesn't depend on Chrome, so it's tested with plain Node.js 22 or later (no packages to install):
+
+```sh
+npm test
+```
+
+The tests replay every sort against a model of Chrome's own tab-moving rules (`test/tab-strip.js`), across thousands of random windows with pinned tabs, tab groups and split views.
+
+`./package_for_web_store.sh` zips `src/` for the Chrome Web Store, using the version in `src/manifest.json`.
 
 ### License
 

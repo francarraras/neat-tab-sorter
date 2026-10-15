@@ -1,11 +1,11 @@
 #!/bin/sh
+# Zips src/ for upload to the Chrome Web Store, named after the version in src/manifest.json.
+set -eu
+cd "$(dirname "$0")"
 
-VERSION="0.4.2"
+VERSION=$(sed -n 's/^ *"version": *"\([^"]*\)".*/\1/p' src/manifest.json)
+ZIP="simple-tab-sorter-v$VERSION.zip"
 
-# Replace version number if not already done so...
-gsed -i "s/\"version\": \".*\"/\"version\": \"$VERSION\"/g" src/manifest.json
-
-# Zip src dir for upload to the Chrome Web Store
-zip -r simple-tab-sorter-v$VERSION.zip src
-
-# TODO: Look into https://github.com/github-tools/github-release-notes
+rm -f "$ZIP"
+(cd src && zip -qr -X "../$ZIP" . -x '*.DS_Store')
+echo "Created $ZIP"
