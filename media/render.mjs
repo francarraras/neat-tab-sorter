@@ -44,7 +44,7 @@ await renderMedia({
     composition: await composition('ReadmePreview'), serveUrl, codec: 'prores', proResProfile: '4444', scale: 0.75, outputLocation: intermediate,
 });
 const ffmpeg = spawnSync('npx', ['remotion', 'ffmpeg', '-y', '-loglevel', 'error', '-i', intermediate, '-vf',
-    'split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle',
+    'split[a][b];[a]palettegen=stats_mode=full[p];[b][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle',
     out('docs/preview.gif')], { cwd: media, stdio: 'inherit' });
 fs.rmSync(path.dirname(intermediate), { recursive: true, force: true });
 if (ffmpeg.status !== 0) throw new Error('ffmpeg failed to make the GIF');
