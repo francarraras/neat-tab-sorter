@@ -4,6 +4,8 @@ All notable changes to Neat Tab Sorter. The format follows [Keep a Changelog](ht
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-15
+
 ### Added
 
 - After each sort, the toolbar icon briefly shows how many tabs moved, or ✓ when the window was already in order. Its tooltip has the details, such as "Moved 7 of 42 tabs in 40 ms", and a reminder that right-clicking undoes the sort.

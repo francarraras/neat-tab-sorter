@@ -4,7 +4,7 @@ Everything to paste into the [developer dashboard](https://chrome.google.com/web
 
 ## Package
 
-Upload `dist/neat-tab-sorter-v1.0.0.zip` (from `npm run package`). The name, summary and icon come from `src/manifest.json`:
+Upload `dist/neat-tab-sorter-v<version>.zip` (from `npm run package`, or attached to the GitHub release). The name, summary and icon come from `src/manifest.json`:
 
 - **Name:** Neat Tab Sorter
 - **Summary** (132 characters max): Sort tabs by title, URL, site or recent use in one click. Tab groups stay intact, numbers sort naturally, and you can undo.

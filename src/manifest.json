@@ -1,7 +1,7 @@
 {
     "name": "Neat Tab Sorter",
     "description": "Sort tabs by title, URL, site or recent use in one click. Tab groups stay intact, numbers sort naturally, and you can undo.",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "manifest_version": 3,
     "minimum_chrome_version": "102",
     "homepage_url": "https://github.com/francarraras/neat-tab-sorter",
