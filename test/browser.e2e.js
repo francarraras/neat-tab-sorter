@@ -42,6 +42,18 @@ async function inExtension(fn, arg) {
     return page.evaluate(fn, arg);
 }
 
+/**
+ * Waits until `fn` returns true in the extension page. (page.waitForFunction can't be used there:
+ * it polls by evaluating strings, which the extension's content security policy blocks.)
+ */
+async function inExtensionUntil(fn, timeout = 5000) {
+    const deadline = Date.now() + timeout;
+    while (!(await page.evaluate(fn))) {
+        assert.ok(Date.now() < deadline, `Timed out waiting for ${fn}`);
+        await new Promise(resolve => setTimeout(resolve, 50));
+    }
+}
+
 const titles = tabs => tabs.map(tab => tab.title);
 const membership = tabs => Object.fromEntries(tabs.map(tab => [tab.id, tab.groupId]));
 
@@ -231,12 +243,12 @@ test('the toolbar icon shows what a sort did, then clears', async () => {
 
 test('the settings page saves changes and disables custom-only settings', async () => {
     await page.goto(`chrome-extension://${extensionId}/options.html`);
-    await page.waitForFunction(() => document.getElementById('sortBy').value === 'url');
+    await inExtensionUntil(() => document.getElementById('sortBy')?.value === 'url');
     assert.equal(await page.isDisabled('#groupFrom'), true);
     await page.selectOption('#sortBy', 'custom');
-    await page.waitForFunction(() => !document.getElementById('groupFrom').disabled);
+    await inExtensionUntil(() => !document.getElementById('groupFrom').disabled);
     await page.click('text=Sort pinned tabs');
-    await page.waitForFunction(() => document.getElementById('status').textContent === 'Saved');
+    await inExtensionUntil(() => document.getElementById('status').textContent === 'Saved');
     const stored = await inExtension(() => chrome.storage.sync.get(null));
     assert.equal(stored.sortBy, 'custom');
     assert.equal(stored.sortPinnedTabs, true);
