@@ -160,8 +160,8 @@ function arrangeByRank(entries, rankOf, isAnchor) {
 // Plans
 //
 // A plan is the list of moves that turns a window's current tab order into the desired one, plus
-// the resulting order. Moves use Chrome's own semantics: `index` is where the (first) moved tab
-// ends up, so moves must be made one after another, in order.
+// the resulting order and how many tabs it moves. Moves use Chrome's own semantics: `index` is where
+// the (first) moved tab ends up, so moves must be made one after another, in order.
 //
 //   { tabIds: [1, 2], index: 5 }  ->  chrome.tabs.move([1, 2], { index: 5 })
 //   { groupId: 7, index: 0 }      ->  chrome.tabGroups.move(7, { index: 0 })
@@ -263,7 +263,8 @@ function plan(tabs, order) {
     if (sim.length !== expected.length || sim.some((id, index) => id !== expected[index])) {
         throw new Error('Planned moves do not produce the planned order');
     }
-    return { moves: batch(ops), order: expected };
+    const movedTabs = ops.reduce((total, op) => total + (op.size ?? 1), 0); // a group moves all its tabs
+    return { moves: batch(ops), order: expected, movedTabs };
 }
 
 /**
@@ -294,7 +295,7 @@ function planSegment(current, target, start, sim, ops) {
         }
         if (to === from) return;
         sim.splice(to, 0, ...sim.splice(from, entry.ids.length));
-        if (entry.groupId !== undefined) ops.push({ groupId: entry.groupId, index: to });
+        if (entry.groupId !== undefined) ops.push({ groupId: entry.groupId, index: to, size: entry.ids.length });
         else ops.push({ tabId: entry.ids[0], index: to });
     });
 }

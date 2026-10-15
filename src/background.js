@@ -1,4 +1,5 @@
 import { forgetWindow, sortWindow, undoSort } from './engine.js';
+import { showSorted, showUndone } from './feedback.js';
 import { loadSettings } from './settings.js';
 
 const UNDO_MENU_ID = 'undo';
@@ -22,22 +23,32 @@ async function windowIdOf(tab) {
     return tab?.windowId ?? (await chrome.windows.getLastFocused()).id;
 }
 
+async function sort(tab) {
+    const windowId = await windowIdOf(tab);
+    await showSorted(windowId, await sortWindow(windowId));
+}
+
+async function undo(tab) {
+    const windowId = await windowIdOf(tab);
+    await showUndone(windowId, await undoSort(windowId));
+}
+
 // Toolbar icon click, or the "Sort tabs" keyboard shortcut (_execute_action).
-chrome.action.onClicked.addListener(tab => enqueue(async () => sortWindow(await windowIdOf(tab))));
+chrome.action.onClicked.addListener(tab => enqueue(() => sort(tab)));
 
 chrome.commands.onCommand.addListener((command, tab) => {
-    if (command === 'undo-sort') enqueue(async () => undoSort(await windowIdOf(tab)));
+    if (command === 'undo-sort') enqueue(() => undo(tab));
 });
 
 chrome.contextMenus.onClicked.addListener(({ menuItemId }, tab) => {
     if (menuItemId === UNDO_MENU_ID) {
-        enqueue(async () => undoSort(await windowIdOf(tab)));
+        enqueue(() => undo(tab));
     } else if (menuItemId.startsWith(SORT_BY_MENU_PREFIX)) {
         // Picking a sort order makes it the default and sorts right away.
         const sortBy = menuItemId.slice(SORT_BY_MENU_PREFIX.length);
         enqueue(async () => {
             await chrome.storage.sync.set({ sortBy });
-            await sortWindow(await windowIdOf(tab));
+            await sort(tab);
         });
     }
 });

@@ -7,7 +7,7 @@ const TAB_STRIP_BUSY = /cannot be edited right now/i; // the user is dragging a 
 
 const undoKey = windowId => `undo:${windowId}`;
 
-/** Sorts a window. Returns true if any tab was moved. */
+/** Sorts a window. Returns what it did: { moved, total, ms }, where moved is 0 if it was already sorted. */
 export async function sortWindow(windowId) {
     const settings = await loadSettings();
     return rearrange(
@@ -18,14 +18,17 @@ export async function sortWindow(windowId) {
     );
 }
 
-/** Puts a window's tabs back the way they were before its last sort. Returns false if there's nothing to undo. */
+/**
+ * Puts a window's tabs back the way they were before its last sort. Returns what it did, like
+ * sortWindow(), or null if there's nothing to undo.
+ */
 export async function undoSort(windowId) {
     const key = undoKey(windowId);
     const { [key]: saved } = await chrome.storage.session.get(key);
-    if (!saved) return false;
-    await rearrange(windowId, ({ tabs }) => planRestore(tabs, saved));
+    if (!saved) return null;
+    const result = await rearrange(windowId, ({ tabs }) => planRestore(tabs, saved));
     await chrome.storage.session.remove(key);
-    return true;
+    return result;
 }
 
 export function forgetWindow(windowId) {
@@ -35,21 +38,26 @@ export function forgetWindow(windowId) {
 /**
  * Plans and makes the moves for a window, then checks the result. If the window changed under us
  * (a tab was opened or closed mid-sort, or the user grabbed a tab), it re-plans from the new state.
+ * Returns how many tabs it moved, out of how many, and how long it took in milliseconds.
  */
 async function rearrange(windowId, makePlan, beforeFirstMove) {
-    let moved = false;
+    const start = performance.now();
+    let started = false;
+    let moved = 0;
     for (let attempt = 1; ; attempt++) {
         const state = await readWindow(windowId);
-        const { moves, order } = makePlan(state);
-        if (!moves.length) return moved;
-        if (!moved) {
-            moved = true;
+        const { moves, order, movedTabs } = makePlan(state);
+        const result = () => ({ moved, total: state.tabs.length, ms: performance.now() - start });
+        if (!moves.length) return result();
+        if (!started) {
+            started = true;
             await beforeFirstMove?.(state.tabs.map(tab => tab.id));
         }
         try {
             await applyMoves(moves);
+            moved += movedTabs;
             const { tabs } = await readWindow(windowId, { tabsOnly: true });
-            if (tabs.length === order.length && tabs.every((tab, index) => tab.id === order[index])) return true;
+            if (tabs.length === order.length && tabs.every((tab, index) => tab.id === order[index])) return result();
             if (attempt >= MAX_ATTEMPTS) throw new Error(`Window ${windowId} kept changing while it was being sorted`);
         } catch (error) {
             if (attempt >= MAX_ATTEMPTS) throw error;

@@ -18,17 +18,19 @@ const withIndex = tabs => tabs.map((t, index) => ({ ...t, index }));
 
 /** Sorts `tabs` on a model of Chrome's tab strip, checking that nothing but the order changed. */
 function sort(tabs, settings = {}, groups = []) {
-    const { moves, order } = planSort(withIndex(tabs), groups, { ...DEFAULT_SETTINGS, ...settings });
+    const { moves, order, movedTabs } = planSort(withIndex(tabs), groups, { ...DEFAULT_SETTINGS, ...settings });
     const strip = new TabStrip(tabs);
     strip.apply(moves);
     assert.deepEqual(strip.events, []);
     assert.deepEqual(strip.ids, order);
+    // A tab move moves its tabs; a group move moves every tab in the group.
+    const groupSize = groupId => tabs.filter(t => t.groupId === groupId).length;
+    assert.equal(movedTabs, moves.reduce((count, move) => count + (move.tabIds?.length ?? groupSize(move.groupId)), 0));
     const byId = new Map(tabs.map(t => [t.id, t]));
-    return { tabs: order.map(id => byId.get(id)), moves, strip };
+    return { tabs: order.map(id => byId.get(id)), moves, movedTabs, strip };
 }
 const urls = ({ tabs }) => tabs.map(t => t.url);
 const titles = ({ tabs }) => tabs.map(t => t.title);
-const movedTabs = moves => moves.reduce((count, move) => count + (move.tabIds?.length ?? 1), 0);
 
 test('URL sort ignores protocol and www, and compares numbers naturally', () => {
     const result = sort([
@@ -169,14 +171,27 @@ test('split views are never moved; other tabs are sorted around them', () => {
 test('only out-of-place tabs move', () => {
     const sorted = ['a', 'b', 'c', 'd', 'e', 'f'].map(letter => tab(`https://${letter}.com/`));
     assert.equal(sort(sorted).moves.length, 0);
+    assert.equal(sort(sorted).movedTabs, 0);
 
     const oneOff = [sorted[0], sorted[4], sorted[1], sorted[2], sorted[3], sorted[5]];
-    assert.equal(movedTabs(sort(oneOff).moves), 1);
+    assert.equal(sort(oneOff).movedTabs, 1);
 
     const reversed = [...sorted].reverse();
-    const { moves } = sort(reversed);
-    assert.equal(movedTabs(moves), sorted.length - 1);
+    const { moves, movedTabs } = sort(reversed);
+    assert.equal(movedTabs, sorted.length - 1);
     assert.equal(moves.length, 1, 'moves to consecutive indices are batched into one call');
+});
+
+test('a stray tab moves rather than a whole tab group', () => {
+    // Groups go before ungrouped tabs: moving the one ungrouped tab is cheaper than moving 3 grouped ones.
+    const result = sort([
+        tab('https://z.com/'),
+        tab('https://a.com/', { groupId: 1 }),
+        tab('https://b.com/', { groupId: 1 }),
+        tab('https://c.com/', { groupId: 1 }),
+    ], {}, [{ id: 1, title: 'Group' }]);
+    assert.deepEqual(urls(result), ['https://a.com/', 'https://b.com/', 'https://c.com/', 'https://z.com/']);
+    assert.equal(result.movedTabs, 1);
 });
 
 test('heaviestIncreasingSubsequence matches brute force', () => {
@@ -235,8 +250,7 @@ test('random permutations move exactly n - LIS tabs', () => {
         const n = 1 + Math.floor(random() * 30);
         const tabs = shuffle([...Array(n).keys()], random).map(i => tab(`https://site${i}.com/`));
         const target = tabs.map(t => Number(t.url.match(/\d+/)[0]));
-        const { moves } = sort(tabs);
-        assert.equal(movedTabs(moves), n - longestIncreasing(target));
+        assert.equal(sort(tabs).movedTabs, n - longestIncreasing(target));
     }
 });
 
