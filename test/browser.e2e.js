@@ -81,8 +81,13 @@ test('the service worker registers its listeners', async () => {
     assert.deepEqual(listeners, { action: true, commands: true, menus: true, installed: true });
 });
 
-test('installing opens the user guide', () => {
-    assert.ok(context.pages().some(p => p.url().endsWith('/userguide.html')));
+test('installing opens the user guide', async () => {
+    // The extension opens it asynchronously, so give it a moment.
+    const deadline = Date.now() + 5000;
+    while (!context.pages().some(p => p.url().endsWith('/userguide.html'))) {
+        assert.ok(Date.now() < deadline, 'the user guide never opened');
+        await new Promise(resolve => setTimeout(resolve, 50));
+    }
 });
 
 test('the sort shortcut is assigned', async () => {
