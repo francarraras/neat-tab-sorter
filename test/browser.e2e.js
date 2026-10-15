@@ -26,6 +26,7 @@ async function inExtension(fn, arg) {
     await page.evaluate(async () => {
         if (globalThis.engine) return;
         globalThis.engine = await import(chrome.runtime.getURL('engine.js'));
+        globalThis.feedback = await import(chrome.runtime.getURL('feedback.js'));
         globalThis.loaded = async windowId => {
             for (let i = 0; i < 400; i++) {
                 const tabs = await chrome.tabs.query({ windowId });
@@ -123,14 +124,16 @@ test('URL sort: pinned first, groups by name, then ungrouped tabs', async () => 
 });
 
 test('re-sorting a sorted window moves nothing', async () => {
-    assert.equal(await inExtension(id => engine.sortWindow(id), windowId), false);
+    const result = await inExtension(id => engine.sortWindow(id), windowId);
+    assert.equal(result.moved, 0);
+    assert.equal(result.total, 10);
 });
 
 test('undo restores the previous order exactly', async () => {
     const restored = await inExtension(async id => { await engine.undoSort(id); return snapshot(id); }, windowId);
     assert.deepEqual(restored.map(tab => tab.id), before0.map(tab => tab.id));
     assert.deepEqual(membership(restored), membership(before0));
-    assert.equal(await inExtension(id => engine.undoSort(id), windowId), false, 'nothing left to undo');
+    assert.equal(await inExtension(id => engine.undoSort(id), windowId), null, 'nothing left to undo');
 });
 
 test('title sort ignores unread counters, and group order can be kept', async () => {
@@ -167,7 +170,7 @@ test('150 shuffled tabs: correct, group-safe, fast and undoable', async t => {
         await engine.sortWindow(win.id);
         const sortMs = performance.now() - start;
         const sorted = await snapshot(win.id);
-        const movedAgain = await engine.sortWindow(win.id);
+        const movedAgain = (await engine.sortWindow(win.id)).moved;
         start = performance.now();
         await engine.undoSort(win.id);
         const undoMs = performance.now() - start;
@@ -178,7 +181,7 @@ test('150 shuffled tabs: correct, group-safe, fast and undoable', async t => {
     }, urls);
     const { before, sorted, restored, groups } = report;
     assert.deepEqual(membership(sorted), membership(before), 'group membership unchanged');
-    assert.equal(report.movedAgain, false, 'second sort moves nothing');
+    assert.equal(report.movedAgain, 0, 'second sort moves nothing');
     assert.deepEqual(restored.map(tab => tab.id), before.map(tab => tab.id), 'undo restores the order');
 
     // Check the result independently: pinned tabs, then groups by name, then ungrouped; each part by URL.
@@ -198,6 +201,32 @@ test('150 shuffled tabs: correct, group-safe, fast and undoable', async t => {
     }
     assert.ok(report.sortMs < 2000 && report.undoMs < 2000, `sort ${report.sortMs} ms, undo ${report.undoMs} ms`);
     t.diagnostic(`150 tabs: sort ${report.sortMs.toFixed(0)} ms, undo ${report.undoMs.toFixed(0)} ms`);
+});
+
+test('the toolbar icon shows what a sort did, then clears', async () => {
+    const shown = await inExtension(async id => {
+        const [active] = await chrome.tabs.query({ active: true, windowId: id });
+        const icon = async () => ({
+            text: await chrome.action.getBadgeText({ tabId: active.id }),
+            title: await chrome.action.getTitle({ tabId: active.id }),
+        });
+        await chrome.storage.sync.set({ sortBy: 'url' });
+        const moved = await engine.sortWindow(id); // the previous test left this window sorted by title
+        await feedback.showSorted(id, moved);
+        const afterSort = { ...(await icon()), moved: moved.moved };
+        await feedback.showSorted(id, await engine.sortWindow(id));
+        const afterResort = await icon();
+        await new Promise(resolve => setTimeout(resolve, 4300));
+        return { afterSort, afterResort, cleared: await icon() };
+    }, windowId);
+    assert.ok(shown.afterSort.moved > 0);
+    assert.equal(shown.afterSort.text, String(shown.afterSort.moved));
+    assert.match(shown.afterSort.title, /^Sorted: moved \d+ of 10 tabs in \d+ ms\. Right-click to undo\.$/);
+    assert.equal(shown.afterResort.text, '✓');
+    assert.equal(shown.afterResort.title, 'Already sorted: none of the 10 tabs needed to move.');
+    assert.equal(shown.cleared.text, '');
+    assert.equal(shown.cleared.title, 'Sort tabs (right-click for undo and sort options)');
+    await inExtension(() => chrome.storage.sync.clear());
 });
 
 test('the settings page saves changes and disables custom-only settings', async () => {

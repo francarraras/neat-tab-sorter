@@ -1,7 +1,7 @@
 // The made-up tabs in the demos. Every sorted order is computed by the extension's own sort engine
 // (src/sort.js), so the animations always show what the extension really does.
 import { DEFAULT_SETTINGS } from '../../src/settings.js';
-import { planSort } from '../../src/sort.js';
+import { planRestore, planSort } from '../../src/sort.js';
 
 export const GROUPS = {
     1: { id: 1, title: '1. Work', color: '#1a73e8' },
@@ -30,11 +30,18 @@ export const TABS = {
 
 const keyOf = new Map(Object.entries(TABS).map(([key, value]) => [value.id, key]));
 
+const plan = (keys, sortBy) => planSort(keys.map(key => TABS[key]), Object.values(GROUPS), { ...DEFAULT_SETTINGS, sortBy });
+
 /** Sorts a window (a list of tab keys, left to right) the way the extension would. */
 export function sorted(keys, sortBy) {
-    const { order } = planSort(keys.map(key => TABS[key]), Object.values(GROUPS), { ...DEFAULT_SETTINGS, sortBy });
-    return order.map(id => keyOf.get(id));
+    return plan(keys, sortBy).order.map(id => keyOf.get(id));
 }
+
+/** How many tabs the extension moves to sort `keys`: the number its toolbar badge shows. */
+export const movedBySort = (keys, sortBy) => plan(keys, sortBy).movedTabs;
+
+/** How many tabs Undo moves to get from `keys` back to `saved`. */
+export const movedByUndo = (keys, saved) => planRestore(keys.map(key => TABS[key]), saved.map(key => TABS[key].id)).movedTabs;
 
 // The demo video: a messy window, sorted by title, then by URL, undone, then sorted again.
 export const DEMO_MESSY = ['mail', 'issue19', 'report', 'plan', 'chat', 'issue2', 'news'];

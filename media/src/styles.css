@@ -160,6 +160,25 @@
 
 .btn.pressed { background: #dfe3e8; }
 
+.btn { position: relative; }
+
+/* The badge Chrome draws on an extension's toolbar icon. */
+.badge {
+    position: absolute;
+    right: -2px;
+    bottom: 1px;
+    min-width: 15px;
+    height: 13px;
+    padding: 0 3px;
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 700;
+    line-height: 13px;
+    text-align: center;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1.5px #fff;
+}
+
 .omnibox {
     display: flex;
     flex: 1;

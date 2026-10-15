@@ -35,6 +35,7 @@ Every order compares numbers naturally and ignores upper and lower case. Tab gro
 | To... | Do this |
 | --- | --- |
 | Sort the current window | Click the toolbar icon, or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> |
+| See what a sort did | Look at the icon: for a few seconds it shows how many tabs moved (✓ if none had to). Hover it for details |
 | Undo the last sort | Right-click the icon, then **Undo last sort** (or give it a shortcut) |
 | Change your default order | Right-click the icon and pick an order (it sorts right away), or open the settings |
 | Change the shortcuts | Go to `chrome://extensions/shortcuts` |

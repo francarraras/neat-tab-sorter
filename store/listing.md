@@ -16,7 +16,7 @@ Upload `dist/neat-tab-sorter-v1.0.0.zip` (from `npm run package`). The name, sum
 ```text
 Neat Tab Sorter puts the tabs in your window in order with one click on its toolbar icon, or with Alt+Shift+S.
 
-• Only moves what's out of place: re-sorting a sorted window changes nothing, and big windows sort in a blink.
+• Only moves what's out of place: re-sorting a sorted window changes nothing, and big windows sort in a blink. The icon shows you how many tabs moved.
 • Tab groups stay intact. Groups come first, ordered by name (number them "1. Work", "2. Trip", "10. Later" to choose their order), or keep your own group order.
 • Undo: right-click the icon and choose "Undo last sort" to put every tab back where it was.
 • Natural order: "Episode 2" comes before "Episode 10", upper and lower case are treated the same, and unread counters like "(3) Inbox" don't make tabs jump around.
