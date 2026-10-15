@@ -1,0 +1,17 @@
+{
+    "name": "neat-tab-sorter-media",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "studio": "remotion studio src/index.jsx",
+        "render": "node render.mjs"
+    },
+    "dependencies": {
+        "@remotion/bundler": "4.0.530",
+        "@remotion/cli": "4.0.530",
+        "@remotion/renderer": "4.0.530",
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "remotion": "4.0.530"
+    }
+}

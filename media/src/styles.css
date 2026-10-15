@@ -1,0 +1,306 @@
+* { box-sizing: border-box; }
+
+.scene {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    color: #fff;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background:
+        radial-gradient(900px 500px at 0% 0%, rgb(94 234 212 / 35%), transparent 70%),
+        radial-gradient(800px 600px at 100% 100%, rgb(4 47 46 / 55%), transparent 70%),
+        linear-gradient(135deg, #0f766e 0%, #0d9488 55%, #14b8a6 100%);
+}
+
+/* Solid color for GIFs, which can't show smooth gradients. */
+.scene.flat { background: #0e8a80; }
+
+.headline {
+    margin: 0;
+    font-size: 46px;
+    font-weight: 750;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.sub {
+    margin: 12px 0 0;
+    font-size: 21px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.label {
+    display: inline-block;
+    padding: 4px 11px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: rgb(255 255 255 / 18%);
+    border-radius: 999px;
+}
+
+/* Browser window */
+
+.window {
+    position: relative;
+    overflow: hidden;
+    color: #1f1f1f;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 30px 60px -20px rgb(0 0 0 / 45%), 0 0 0 1px rgb(0 0 0 / 8%);
+}
+
+.tabstrip {
+    position: relative;
+    height: 44px;
+    background: #dde3ea;
+}
+
+.item {
+    position: absolute;
+    top: 8px;
+    display: flex;
+    align-items: center;
+    height: 36px;
+}
+
+/* Opaque, so tabs gliding past each other don't overprint; --lift raises a moving tab. */
+.tab {
+    gap: 8px;
+    width: 136px;
+    padding: 0 12px;
+    color: #3c4043;
+    font-size: 12.5px;
+    background: #dde3ea;
+    border-radius: 9px 9px 0 0;
+    box-shadow: inset 0 -3px 0 var(--group, transparent), 0 calc(var(--lift, 0) * 8px) calc(var(--lift, 0) * 18px) rgb(0 0 0 / calc(var(--lift, 0) * 24%));
+}
+
+.tab::after {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    width: 1px;
+    height: 16px;
+    background: #a9b0b8;
+    content: "";
+}
+
+.tab.active { color: #1f1f1f; background: #fff; }
+
+.tab.active::after { display: none; }
+
+.tab.pinned { justify-content: center; width: 44px; padding: 0; }
+
+.tab .title {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    -webkit-mask-image: linear-gradient(90deg, #000 78%, transparent);
+}
+
+.fav {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 16px;
+    height: 16px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    border-radius: 4px;
+}
+
+.chip {
+    top: 14px;
+    justify-content: center;
+    height: 24px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    background: var(--group);
+    border-radius: 7px;
+}
+
+.newtab {
+    top: 12px;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    color: #5f6368;
+    font-size: 22px;
+    font-weight: 300;
+}
+
+.toolbar {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    height: 46px;
+    padding: 0 10px;
+    background: #fff;
+    border-bottom: 1px solid #e4e7eb;
+}
+
+.btn {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    color: #5f6368;
+    border-radius: 50%;
+}
+
+.btn svg { width: 18px; height: 18px; }
+
+.btn.pressed { background: #dfe3e8; }
+
+.omnibox {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    height: 34px;
+    margin: 0 6px;
+    padding: 0 16px;
+    color: #3c4043;
+    font-size: 13.5px;
+    background: #eef1f4;
+    border-radius: 17px;
+}
+
+.omnibox b { font-weight: 500; color: #1f1f1f; }
+
+.avatar {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    margin: 0 4px;
+    background: linear-gradient(135deg, #f6ad55, #ed8936);
+    border-radius: 50%;
+}
+
+.viewport { position: relative; padding: 30px 48px; background: #fff; }
+
+.line { height: 12px; margin: 0 0 12px; background: #eceff2; border-radius: 6px; }
+
+.line.title { width: 46%; height: 22px; margin-bottom: 20px; background: #dfe3e8; }
+
+.cards { display: flex; gap: 16px; margin-top: 22px; }
+
+.cards div { flex: 1; height: 120px; background: #f3f5f7; border-radius: 12px; }
+
+/* Right-click menu */
+
+.menu {
+    width: 272px;
+    padding: 8px 0;
+    color: #1f1f1f;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 28%), 0 0 0 1px rgb(0 0 0 / 6%);
+}
+
+.mi {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    height: 32px;
+    padding: 0 16px 0 42px;
+}
+
+.mi.hover { background: #e8ebef; }
+
+.mi.head { padding-left: 16px; font-weight: 600; }
+
+.mi.muted { color: #5f6368; }
+
+.radio {
+    position: absolute;
+    left: 15px;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #5f6368;
+    border-radius: 50%;
+}
+
+.radio.on { border-color: #0b57d0; }
+
+.radio.on::after {
+    position: absolute;
+    inset: 2px;
+    background: #0b57d0;
+    border-radius: 50%;
+    content: "";
+}
+
+.sep { height: 1px; margin: 6px 0; background: #e3e6ea; }
+
+/* Keys, pointer, brand */
+
+.keys { display: inline-flex; gap: 10px; align-items: center; vertical-align: middle; }
+
+.key {
+    display: grid;
+    place-items: center;
+    min-width: 50px;
+    height: 50px;
+    padding: 0 14px;
+    color: #0f766e;
+    font-size: 21px;
+    font-weight: 750;
+    background: #fff;
+    border-radius: 11px;
+    box-shadow: 0 4px 0 rgb(0 0 0 / 22%);
+}
+
+.plus { font-size: 22px; font-weight: 700; opacity: 0.85; }
+
+.cursor {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    margin: -2px 0 0 -4px;
+    filter: drop-shadow(0 2px 3px rgb(0 0 0 / 35%));
+}
+
+.ripple {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    margin: -22px 0 0 -22px;
+    border: 3px solid rgb(255 255 255 / 95%);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgb(13 148 136 / 60%);
+}
+
+.brand { display: flex; gap: 22px; align-items: center; }
+
+.wordmark { font-weight: 800; letter-spacing: -0.025em; line-height: 1; }
+
+.caption {
+    position: absolute;
+    right: 0;
+    left: 0;
+    text-align: center;
+}
+
+.caption h2 {
+    margin: 0;
+    font-size: 42px;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+}
+
+.caption p {
+    margin: 10px 0 0;
+    font-size: 21px;
+    font-weight: 500;
+    opacity: 0.92;
+}

@@ -1,6 +1,6 @@
 # Chrome Web Store listing
 
-Everything to paste into the [developer dashboard](https://chrome.google.com/webstore/devconsole), tab by tab. The images in this folder are made by `npm run assets`.
+Everything to paste into the [developer dashboard](https://chrome.google.com/webstore/devconsole), tab by tab. The images and video in this folder are drawn by `npm run media`, except the settings-page screenshots, which come from `npm run screenshots`.
 
 ## Package
 
@@ -49,7 +49,7 @@ Based on Simple Tab Sorter by Peter White.
 | Field | File |
 | --- | --- |
 | Store icon (128×128) | `icon-128.png` |
-| Global promo video | YouTube link to `demo-video.webm` (upload it to YouTube first; Unlisted is fine) |
+| Global promo video | YouTube link to `demo-video.mp4` (upload it to YouTube first; Unlisted is fine) |
 | Screenshots (1280×800), in this order | `screenshot-1-sort.png`, `screenshot-2-groups.png`, `screenshot-3-menu.png`, `screenshot-4-settings.png`, `screenshot-5-settings-dark.png` |
 | Small promo tile (440×280) | `promo-small-440x280.png` |
 | Marquee promo tile (1400×560, optional) | `promo-marquee-1400x560.png` |

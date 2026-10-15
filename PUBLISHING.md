@@ -8,25 +8,14 @@
 
 ## Each release
 
-1. **Check it:**
+Versioning, the changelog and tagging are covered in [MAINTAINING.md](MAINTAINING.md#releasing): pushing a tag like `v1.1.0` makes the release workflow test everything and publish a GitHub release with `neat-tab-sorter-v1.1.0.zip` attached. Then:
 
-   ```sh
-   npm test            # sorting logic, no install needed
-   npm install && npx playwright install chromium    # first time only
-   npm run test:e2e    # the real extension in headless Chromium
-   ```
-
-2. **Bump the version** in `src/manifest.json` (every upload needs a higher version than the last), and update the date in `PRIVACY.md` if the policy changed.
-3. **Regenerate the artwork** if the UI changed: `npm run assets`.
-4. **Build the package:** `npm run package` creates `dist/neat-tab-sorter-v<version>.zip`. To double-check the exact package, unzip it, load the folder with **Load unpacked** on `chrome://extensions`, and run `EXTENSION_DIR=<that folder> npm run test:e2e`.
-5. **First release only:** upload `store/demo-video.webm` to YouTube (Unlisted is fine) for the listing's promo video.
-6. In the dashboard:
+1. **If anything visible changed,** refresh the store images first: `npm run screenshots` (the settings page) and `npm run media` (the icon, the drawn screenshots and promo tiles, the demo video and the README preview).
+2. **First release only:** upload `store/demo-video.mp4` to YouTube (Unlisted is fine) for the listing's promo video.
+3. In the [dashboard](https://chrome.google.com/webstore/devconsole):
    - **First release:** click **New item** and upload the zip. Then fill in the **Store listing**, **Privacy practices** and **Distribution** tabs from [store/listing.md](store/listing.md).
-   - **Updates:** open the item, go to **Package**, and upload the new zip.
-7. Click **Submit for review**. Reviews usually take from a few hours to a few days; you'll get an email. You can choose to publish manually after approval.
-8. **After it's live:** replace "coming soon" in `README.md` with the store link, then tag the release and attach the zip:
+   - **Updates:** open the item, go to **Package**, and upload the new zip. Every upload needs a higher version than the last.
+4. Click **Submit for review**. Reviews usually take from a few hours to a few days, and you'll get an email. You can choose to publish manually once it's approved.
+5. **After the first approval:** replace "coming soon" in `README.md` with the store link.
 
-   ```sh
-   git tag v1.0.0 && git push origin v1.0.0
-   gh release create v1.0.0 dist/neat-tab-sorter-v1.0.0.zip --title "Neat Tab Sorter 1.0.0" --notes "First release."
-   ```
+To check the exact package before uploading, build it with `npm run package`, unzip `dist/neat-tab-sorter-v<version>.zip`, load the folder with **Load unpacked**, and run `EXTENSION_DIR=<that folder> npm run test:e2e`.

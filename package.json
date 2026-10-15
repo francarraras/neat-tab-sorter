@@ -5,7 +5,8 @@
     "scripts": {
         "test": "node --test \"test/*.test.js\"",
         "test:e2e": "node --test test/browser.e2e.js",
-        "assets": "node store/make-assets.mjs",
+        "screenshots": "node store/settings-screenshots.mjs",
+        "media": "npm --prefix media run render",
         "package": "sh package_for_web_store.sh"
     },
     "devDependencies": {
