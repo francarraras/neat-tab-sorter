@@ -1,9 +1,10 @@
 {
-    "name": "Simple Tab Sorter",
-    "description": "Simple tab sorter that allows user-defined tab group order.",
-    "version": "0.5.0",
+    "name": "Neat Tab Sorter",
+    "description": "Sort tabs by title, URL, site or recent use in one click. Tab groups stay intact, numbers sort naturally, and you can undo.",
+    "version": "1.0.0",
     "manifest_version": 3,
     "minimum_chrome_version": "102",
+    "homepage_url": "https://github.com/francarraras/neat-tab-sorter",
     "permissions": ["tabs", "tabGroups", "storage", "contextMenus"],
     "background": {
         "service_worker": "background.js",
@@ -13,12 +14,14 @@
         "default_title": "Sort tabs (right-click for undo and sort options)",
         "default_icon": {
             "16": "img/16.png",
+            "32": "img/32.png",
             "48": "img/48.png",
             "128": "img/128.png"
         }
     },
     "icons": {
         "16": "img/16.png",
+        "32": "img/32.png",
         "48": "img/48.png",
         "128": "img/128.png"
     },

@@ -4,16 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="author" content="Peter White">
-    <title>Simple Tab Sorter: User Guide</title>
-    <link rel="icon" href="img/16.png">
+    <title>Neat Tab Sorter: User Guide</title>
+    <link rel="icon" href="img/32.png">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <header class="masthead">
         <div class="wrap">
-            <a class="brand" href="options.html"><img src="img/48.png" alt="">Simple Tab Sorter <span class="version" data-version></span></a>
+            <a class="brand" href="options.html"><img src="img/48.png" alt="">Neat Tab Sorter <span class="version" data-version></span></a>
             <nav aria-label="Pages">
                 <a href="options.html">Settings</a>
                 <a href="userguide.html" aria-current="page">User Guide</a>
@@ -24,39 +23,18 @@
 
     <main class="wrap prose">
         <h1>User Guide</h1>
-        <p>Thanks for taking the time to read this page. Doing so will, hopefully, save you time and improve your experience with this extension!
-            Please refer back to this page after receiving updates because behavioral changes may be introduced as a result of any bug fixes or enhancement requests.</p>
-
         <div class="note">
-            <p><strong>Click the Simple Tab Sorter icon, or press <span data-shortcut="_execute_action"></span>, to sort your tabs.</strong>
+            <p><strong>Click the Neat Tab Sorter icon, or press <span data-shortcut="_execute_action"></span>, to sort your tabs.</strong>
                 Only the window you're in is sorted, and tabs are only ever moved: nothing is closed, reloaded, ungrouped or unpinned.</p>
             <p><strong>Changed your mind? Right-click the icon and choose <em>Undo last sort</em>.</strong>
                 Each window remembers the order it had before its last sort until you close it or restart your browser.
                 You can also give undo a keyboard shortcut (currently <span data-shortcut="undo-sort"></span>) on the <a href="#" data-open-shortcuts>shortcuts page</a>.</p>
         </div>
         <p>The icon's right-click menu also lets you sort a different way: picking a sort order sorts the window right away and makes that order the default.
-            If the icon isn't in your toolbar, click the puzzle-piece Extensions button and pin Simple Tab Sorter.</p>
-
-        <h2>What's new in v0.5.0</h2>
-        <ul>
-            <li><strong>Faster, steadier sorting.</strong> There's no popup to load anymore, and only the tabs that are out of place are moved, so sorting an already-sorted window doesn't move anything.</li>
-            <li><strong>Undo</strong> and <strong>keyboard shortcuts</strong>.</li>
-            <li><strong>Natural number order:</strong> "Episode 2" comes before "Episode 10", and <code>…/issues/2</code> before <code>…/issues/19</code>. Upper and lower case are treated the same.</li>
-            <li><strong>Recently used</strong> sort order.</li>
-            <li><strong>Tab group options:</strong> keep your own group order, or leave the tabs inside your groups alone.</li>
-            <li>Suspended tabs are detected automatically, so there's no extension id to configure.</li>
-            <li>Tabs in a split view stay together.</li>
-            <li>Lighter settings pages that save as you go and follow your system's dark mode.</li>
-        </ul>
-
-        <h2>Simple Tab Sorter or Super Tab Sorter: which one's right for you?</h2>
-        <p>Simple Tab Sorter has grown in complexity since its initial release, as a result of user feedback (which is greatly appreciated) and significant changes made to the Chrome browser and API (not so much).
-            It's reached the point where it doesn't feel as "Simple" as I had initially intended and I'm having to say "No" to feature requests that conflict with my design goals of being "Simple" and lightweight.</p>
-        <p>I created <a href="https://chromewebstore.google.com/detail/super-tab-sorter/jjhppbooocacaccnhjninhmigbfmpnkh" target="_blank">Super Tab Sorter</a>, a trustworthy alternative to Simple Tab Sorter for people who want more functionality and customization, even if that means additional complexity and resource consumption.</p>
-        <p>If you want something simple and lightweight, that will remain that way, you'll probably be happier with Simple Tab Sorter.</p>
+            If the icon isn't in your toolbar, click the puzzle-piece Extensions button and pin Neat Tab Sorter.</p>
 
         <h2>Tab groups</h2>
-        <p>Chrome's <a href="https://blog.google/products/chrome/manage-tabs-with-google-chrome/" target="_blank">tab groups</a> are always kept intact and placed to the left of all ungrouped tabs.
+        <p>Chrome's tab groups are always kept intact and placed to the left of all ungrouped tabs.
             By default, groups are put in alphabetical order by name and the tabs inside them are sorted with the same settings as ungrouped tabs.</p>
         <ul>
             <li><strong>To choose the order of your groups, number them:</strong> "1. Work", "2. Shopping", "10. Later". Numbers sort naturally, so 10 comes after 2. Groups without a name go after the named ones.</li>
@@ -75,27 +53,25 @@
             <li><strong>Custom (group by site)</strong>: keeps tabs from the same site together without putting the sites in alphabetical order. See <a href="#custom-sort">Custom sort</a> below.</li>
             <li><strong>Recently used</strong>: the tabs you used most recently come first.</li>
         </ul>
-        <p>Every sort order compares numbers naturally and leaves tabs that tie exactly where they are, relative to each other.</p>
+        <p>Every sort order compares numbers naturally ("Episode 2" comes before "Episode 10"), ignores upper and lower case, and leaves tabs that tie where they are, relative to each other.</p>
 
         <h3>Sort pinned tabs</h3>
-        <p>Simple Tab Sorter <strong>ignores</strong> pinned tabs by default. If you check the box, pinned tabs will remain grouped together but will be sub-sorted by the same criteria used to sort the rest of your tabs.</p>
+        <p>Pinned tabs are left alone by default. If you turn this on, pinned tabs stay together at the start of the window and are sorted the same way as the rest of your tabs.</p>
 
         <h3>Group suspended tabs together</h3>
-        <p>Tab suspenders derived from The Great Suspender, like <a href="https://chromewebstore.google.com/detail/the-marvellous-suspender/noogafoofpebimajpfpamcfhoaifemoa" target="_blank">The Marvellous Suspender</a>, change the URL of each tab they suspend and keep the original URL inside it:</p>
+        <p>Tab suspenders based on The Great Suspender, like The Marvellous Suspender, change the address of each tab they suspend and keep the original address inside it:</p>
         <div class="code">chrome-extension://noogafoofpebimajpfpamcfhoaifemoa/suspended.html#ttl=Google&amp;pos=0&amp;uri=<mark>https://www.google.com/</mark></div>
-        <p>Other tab sorting extensions that I've used group all of these suspended tabs together, which I found annoying and was one of my primary reasons for creating Simple Tab Sorter.
-            By default, Simple Tab Sorter <strong>does not</strong> group suspended tabs together: they're sorted by their original URL, as if they weren't suspended.
-            If you check the box, suspended tabs are moved to the left (of each tab group, and of your ungrouped tabs) and sorted among themselves.</p>
-        <p>Suspended tabs are recognized automatically for any extension that uses this URL format, so there's no extension id to configure anymore.
-            Chrome's built-in Memory Saver doesn't change URLs, so tabs it puts to sleep are always sorted normally.</p>
+        <p>By default, Neat Tab Sorter sorts suspended tabs by their original address, as if they weren't suspended.
+            If you turn this on, suspended tabs are moved to the left (of each tab group, and of your ungrouped tabs) and sorted among themselves.</p>
+        <p>Suspended tabs are recognized automatically for any extension that uses this format.
+            Chrome's built-in Memory Saver doesn't change addresses, so tabs it puts to sleep are always sorted normally.</p>
 
         <h3 id="custom-sort">Custom sort</h3>
         <p>Custom sort gathers the tabs from each site (for example, every <code>github.com</code> tab) into a block, but instead of putting the blocks in alphabetical order, it keeps them in the order the sites already appear in.
-            <strong>This allows you to quickly, and easily, choose the order of your sites by manually rearranging only a handful of tabs before clicking the Simple Tab Sorter icon.</strong>
-            While this may seem unusual at first, I encourage you to experiment with it for a while. I think it will quickly grow on you.</p>
+            <strong>To choose the order of your sites, drag a few tabs into place, then sort.</strong></p>
         <ul>
             <li><strong>Group from</strong>: with <em>Left to right</em>, sites are ordered by their leftmost tab. With <em>Right to left</em>, they're ordered by their rightmost tab instead, so a site you've just opened a new tab for moves to the end.</li>
-            <li><strong>Preserve order within groups</strong>: tabs from the same site keep their current order (the default). If deselected, they're sorted by URL.</li>
+            <li><strong>Preserve order within groups</strong>: tabs from the same site keep their current order (the default). If you turn it off, they're sorted by URL.</li>
         </ul>
 
         <h2>Tips</h2>
@@ -103,6 +79,10 @@
             <li>Want to experiment? Undo puts everything back, or you can open a few tabs in a new window and try different settings there.</li>
             <li>Settings are saved as soon as you change them and are synced with your browser profile, so they apply in every window.</li>
         </ul>
+
+        <h2>Privacy</h2>
+        <p>Neat Tab Sorter doesn't collect or send any data. It reads your tabs' titles and addresses only to sort them, on your computer.
+            Your settings are saved with your browser profile, and each window's undo order is forgotten when you close it or restart your browser.</p>
     </main>
 
     <script type="module" src="page.js"></script>

@@ -1,9 +1,9 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: "[STS] Feature request title..."
+title: "[Feature] Feature request title..."
 labels: ''
-assignees: pwhite2
+assignees: francarraras
 
 ---
 

@@ -4,16 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="author" content="Peter White">
-    <title>Simple Tab Sorter: About</title>
-    <link rel="icon" href="img/16.png">
+    <title>Neat Tab Sorter: About</title>
+    <link rel="icon" href="img/32.png">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <header class="masthead">
         <div class="wrap">
-            <a class="brand" href="options.html"><img src="img/48.png" alt="">Simple Tab Sorter <span class="version" data-version></span></a>
+            <a class="brand" href="options.html"><img src="img/48.png" alt="">Neat Tab Sorter <span class="version" data-version></span></a>
             <nav aria-label="Pages">
                 <a href="options.html">Settings</a>
                 <a href="userguide.html">User Guide</a>
@@ -28,24 +27,30 @@
             <dl class="facts">
                 <dt>Version</dt>
                 <dd data-version></dd>
-                <dt>GitHub</dt>
-                <dd><a href="https://github.com/pwhite2/simple-tab-sorter" target="_blank">github.com/pwhite2/simple-tab-sorter</a></dd>
-                <dt>About me</dt>
-                <dd><a href="https://peterwhite.net" target="_blank">peterwhite.net</a></dd>
+                <dt>Source code</dt>
+                <dd><a href="https://github.com/francarraras/neat-tab-sorter" target="_blank">github.com/francarraras/neat-tab-sorter</a></dd>
+                <dt>Report a problem</dt>
+                <dd><a href="https://github.com/francarraras/neat-tab-sorter/issues" target="_blank">GitHub issues</a></dd>
+                <dt>License</dt>
+                <dd><a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU General Public License v3</a></dd>
             </dl>
         </section>
 
-        <p>You can <a href="https://github.com/pwhite2/simple-tab-sorter/issues/" target="_blank">submit a bug or a feature request</a> if you have issues with, or suggestions for, this extension.
-            Please check to see if your idea or issue already exists before creating a new one - doing so will result in me having more time to improve the product. Thanks!</p>
-        <p>I can be contacted via the contact form at <a href="https://peterwhite.net" target="_blank">peterwhite.net</a> for other inquiries.</p>
+        <p>Neat Tab Sorter is free and open source, made by <a href="https://github.com/francarraras" target="_blank">Fran Carrara</a>.
+            Found a bug or have an idea? Please check the <a href="https://github.com/francarraras/neat-tab-sorter/issues" target="_blank">existing issues</a> first, then open a new one.</p>
 
-        <h2>Warning/Disclaimer</h2>
-        <p>I'd like to acknowledge that my initial inspiration for creating this extension was the lack of an available tab sorting extension that wouldn't group tabs together that were suspended by the original <i>The Great Suspender (TGS)</i> extension.
-            Unfortunately, the author of the original TGS extension sold the extension to an untrustworthy buyer who made secretive changes to the extension, resulting in the security community strongly advocating that people immediately remove the
-            extension with Google, months later (IIRC), removing the original TGS extension from the Chrome Web Store as well as automatically removing it from all Chrome browsers.</p>
-        <p>As a result, many people have forked the original TGS repo on GitHub and some have submitted safe copies of the extension to the Chrome Web Store (e.g., <a href="https://chromewebstore.google.com/detail/the-marvellous-suspender/noogafoofpebimajpfpamcfhoaifemoa" target="_blank">The Marvellous Suspender</a>).
-            Simple Tab Sorter supports these derived works as long as they don't change the URL format of suspended tabs, and recognizes them automatically.</p>
-        <p>Please note that I do not recommend the use of any of these extensions, there's no guarantee that any of the current or future derived works are trustworthy. If you use them, you use them at your own risk.</p>
+        <h2>Credits</h2>
+        <p>Neat Tab Sorter is based on <a href="https://github.com/pwhite2/simple-tab-sorter" target="_blank">Simple Tab Sorter</a> by Peter White, and was modified from it in 2026 with a rebuilt sorting engine, undo, keyboard shortcuts, natural number order and more.
+            Both are free software under the GNU General Public License v3: you're welcome to redistribute and change them under its terms. This program comes with absolutely no warranty.</p>
+
+        <h2>Privacy</h2>
+        <p>Neat Tab Sorter doesn't collect or send any data, and it has no ads, analytics or remote code.
+            It reads your tabs' titles and addresses only to sort them, on your computer.
+            Your settings are saved with your browser profile, and each window's undo order is forgotten when you close it or restart your browser.</p>
+
+        <h2>A note on tab suspenders</h2>
+        <p>Neat Tab Sorter can sort tabs suspended by forks of The Great Suspender, but doesn't recommend any tab suspender.
+            The original The Great Suspender was removed from the Chrome Web Store in 2021 after it changed hands and was flagged as malware, so choose forks carefully, or use Chrome's built-in Memory Saver instead.</p>
     </main>
 
     <script type="module" src="page.js"></script>

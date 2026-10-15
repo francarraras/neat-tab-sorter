@@ -1,56 +1,44 @@
-# Simple Tab Sorter
+# Neat Tab Sorter
 
-<img src="src/img/128.png" width="128px"/>
+<img src="src/img/128.png" width="96" alt="Neat Tab Sorter icon"/>
 
-"Simple Tab Sorter" is a free and open-source Google Chrome extension for people who want quick and easy user-customizable tab sorting and grouping.
+A fast, tidy tab sorter for Chrome. Click the toolbar icon or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> to sort the tabs in the current window; right-click the icon to undo, or to sort a different way.
 
-Click its toolbar icon, or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>, to sort the current window. Right-click the icon to undo the last sort or to sort a different way.
+- **Only moves what's out of place.** Re-sorting a sorted window does nothing, and big windows sort in a blink.
+- **Tab groups stay intact.** Groups go first, in name order ("1. Work", "2. Trip", "10. Later") or in your own order. Split views and pinned tabs are respected too.
+- **Undo** the last sort in any window.
+- **Natural order:** "Episode 2" before "Episode 10", case ignored, and unread counters like "(3) Inbox" don't move tabs around.
+- **Four sort orders:** title, URL, custom (keeps each site's tabs together) and recently used.
+- **Private:** no data collection, no network requests, no remote code. See [PRIVACY.md](PRIVACY.md).
 
-In addition to standard URL, title or recently-used sorting, its "killer features" are:
+## Install
 
-1. Respects Google Chrome's Tab Groups (and split views): groups always stay intact, sorted by name or kept in your own order.
-2. User configurable sort behavior for handling tabs suspended by extensions forked from [The Great Suspender](https://github.com/greatsuspender/thegreatsuspender).
-3. Simple manual override of tab group sort order.
-4. Undo, plus natural number order ("Episode 2" before "Episode 10").
-5. Only tabs that are out of place are moved, so sorting is quick and an already-sorted window doesn't change.
+- **Chrome Web Store:** coming soon.
+- **From source:** download or clone this repository, open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and choose the `src` folder.
 
-### Bugs / Feature Requests
+The User Guide (on the extension's options page) explains every setting.
 
-My intention is to keep this extension "Simple" and light weight. I've received feature requests that conflict with these goals and have created [Super Tab Sorter](https://github.com/pwhite2/super-tab-sorter/) with the intention of it being a feature rich version of Simple Tab Sorter. 
+## Development
 
-You should [give Super Tab Sorter a try](https://chromewebstore.google.com/detail/super-tab-sorter/jjhppbooocacaccnhjninhmigbfmpnkh) if you want more functionality than Simple Tab Sorter and submit feature requests in [Super Tab Sorter's issue tracker](https://github.com/pwhite2/super-tab-sorter/issues/) if it's lacking functionality you desire. Please check the **User Guide** on the Options page before doing that. Also, keep in mind that these extensions sorts tabs, they don't "manage" them. Tab management is not what I do, so look for another extension if you need that.
-
-You can [submit bugs](https://github.com/pwhite2/simple-tab-sorter/issues/) if you encounter issues with this extension. Please refer to the **User Guide**, which can be found in this extension's Options page, before submitting bugs.
-
-I can be contacted via the contact form at [peterwhite.net](https://peterwhite.net) for other inquiries.
-
-### Install from the Chrome Web Store
-
-Simple Tab Sorter is [available via the official Chrome Web Store](https://chrome.google.com/webstore/detail/simple-tab-sorter/cgfpgnepljlgenjclbekbjdlgcodfmjp).
-
-Please note that the webstore version may lag behind the latest version found here. My intention is to limit experimentation to GitHub in an attempt to avoid being buried in support requests from the wider public audience using the Chrome Web Store.
-
-### Install as an extension from source
-
-1. Download and extract the **[latest available release](https://github.com/pwhite2/simple-tab-sorter/releases)**, or clone this repo (if you enjoy living on the edge), to your preferred location.
-2. In any **Google Chrome** compatible browser, navigate to "chrome://extensions" and enable "Developer mode" in the upper right corner.
-3. Click the <kbd>Load unpacked</kbd> button.
-4. Browse to the **src** directory of the extracted folder, or cloned repo, and select or confirm (the terminology may be browser dependent).
-
-Once you have completed the above steps, you should see the <img src="src/img/128.png" width="16px"/> icon in your browser toolbar, indicating successful installation of the extension.
-
-### Development
-
-The sorting logic lives in `src/sort.js` and doesn't depend on Chrome, so it's tested with plain Node.js 22 or later (no packages to install):
+The sorting logic lives in `src/sort.js` and doesn't depend on Chrome, so its tests run on plain Node.js 22 or later, with nothing to install:
 
 ```sh
 npm test
 ```
 
-The tests replay every sort against a model of Chrome's own tab-moving rules (`test/tab-strip.js`), across thousands of random windows with pinned tabs, tab groups and split views.
+They replay every sort against a model of Chrome's own tab-moving rules (`test/tab-strip.js`), across thousands of random windows with pinned tabs, tab groups and split views.
 
-`./package_for_web_store.sh` zips `src/` for the Chrome Web Store, using the version in `src/manifest.json`.
+To also run the extension in a real (headless) Chromium, and to regenerate the Chrome Web Store images and demo video in `store/`:
 
-### License
+```sh
+npm install
+npx playwright install chromium
+npm run test:e2e
+npm run assets
+```
 
-This work is licensed under the GNU General Public License v3.0.
+`npm run package` builds `dist/neat-tab-sorter-v<version>.zip` for the Chrome Web Store. [PUBLISHING.md](PUBLISHING.md) walks through publishing a release.
+
+## Credits and license
+
+Neat Tab Sorter is based on [Simple Tab Sorter](https://github.com/pwhite2/simple-tab-sorter) by Peter White and was modified from it in 2026. Both are free software under the [GNU General Public License v3](LICENSE).

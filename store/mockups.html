@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Neat Tab Sorter: store mockups</title>
+    <!--
+        Chrome Web Store artwork, rendered by make-assets.mjs.
+        Open with ?scene=hero|groups|menu|promo-small|marquee|video (the video scene exposes render(t)).
+        Tab titles and site letters are made up; no real logos.
+    -->
+    <style>
+        * { box-sizing: border-box; }
+
+        html, body { margin: 0; overflow: hidden; }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .scene {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            color: #fff;
+            background:
+                radial-gradient(900px 500px at 0% 0%, rgb(94 234 212 / 35%), transparent 70%),
+                radial-gradient(800px 600px at 100% 100%, rgb(4 47 46 / 55%), transparent 70%),
+                linear-gradient(135deg, #0f766e 0%, #0d9488 55%, #14b8a6 100%);
+        }
+
+        .headline {
+            margin: 0;
+            font-size: 46px;
+            font-weight: 750;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .sub {
+            margin: 12px 0 0;
+            font-size: 21px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .label {
+            display: inline-block;
+            margin: 0 0 10px;
+            padding: 4px 11px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: rgb(255 255 255 / 18%);
+            border-radius: 999px;
+        }
+
+        /* Browser window */
+
+        .window {
+            position: relative;
+            overflow: hidden;
+            color: #1f1f1f;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 30px 60px -20px rgb(0 0 0 / 45%), 0 0 0 1px rgb(0 0 0 / 8%);
+        }
+
+        .tabstrip {
+            position: relative;
+            height: 44px;
+            background: #dde3ea;
+        }
+
+        .item {
+            position: absolute;
+            top: 8px;
+            display: flex;
+            align-items: center;
+            height: 36px;
+            will-change: transform;
+        }
+
+        /* Opaque, so tabs gliding past each other don't overprint; --lift raises a moving tab. */
+        .tab {
+            gap: 8px;
+            width: 136px;
+            padding: 0 12px;
+            color: #3c4043;
+            font-size: 12.5px;
+            background: #dde3ea;
+            border-radius: 9px 9px 0 0;
+            box-shadow: inset 0 -3px 0 var(--group, transparent), 0 calc(var(--lift, 0) * 8px) calc(var(--lift, 0) * 18px) rgb(0 0 0 / calc(var(--lift, 0) * 24%));
+        }
+
+        .tab::after {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            width: 1px;
+            height: 16px;
+            background: #a9b0b8;
+            content: "";
+        }
+
+        .tab.active { color: #1f1f1f; background: #fff; }
+
+        .tab.active::after { display: none; }
+
+        .tab.pinned { justify-content: center; width: 44px; padding: 0; }
+
+        .tab .title {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            -webkit-mask-image: linear-gradient(90deg, #000 78%, transparent);
+        }
+
+        .fav {
+            display: grid;
+            flex: none;
+            place-items: center;
+            width: 16px;
+            height: 16px;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            border-radius: 4px;
+        }
+
+        .chip {
+            top: 14px;
+            height: 24px;
+            padding: 0 9px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            background: var(--group);
+            border-radius: 7px;
+        }
+
+        .newtab {
+            top: 12px;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            color: #5f6368;
+            font-size: 22px;
+            font-weight: 300;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            height: 46px;
+            padding: 0 10px;
+            background: #fff;
+            border-bottom: 1px solid #e4e7eb;
+        }
+
+        .toolbar .btn {
+            display: grid;
+            flex: none;
+            place-items: center;
+            width: 32px;
+            height: 32px;
+            color: #5f6368;
+            border-radius: 50%;
+        }
+
+        .toolbar .btn svg { width: 18px; height: 18px; }
+
+        .omnibox {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            height: 34px;
+            margin: 0 6px;
+            padding: 0 16px;
+            color: #3c4043;
+            font-size: 13.5px;
+            background: #eef1f4;
+            border-radius: 17px;
+        }
+
+        .omnibox b { font-weight: 500; color: #1f1f1f; }
+
+        .toolbar .ext img { width: 18px; height: 18px; }
+
+        .toolbar .ext.pressed { background: #dfe3e8; }
+
+        .avatar {
+            width: 24px;
+            height: 24px;
+            margin: 0 4px;
+            background: linear-gradient(135deg, #f6ad55, #ed8936);
+            border-radius: 50%;
+        }
+
+        .viewport { position: relative; padding: 30px 48px; background: #fff; }
+
+        .line { height: 12px; margin: 0 0 12px; background: #eceff2; border-radius: 6px; }
+
+        .line.title { width: 46%; height: 22px; margin-bottom: 20px; background: #dfe3e8; }
+
+        .cards { display: flex; gap: 16px; margin-top: 22px; }
+
+        .cards div { flex: 1; height: 120px; background: #f3f5f7; border-radius: 12px; }
+
+        /* Context menu */
+
+        .menu {
+            position: absolute;
+            width: 272px;
+            padding: 8px 0;
+            color: #1f1f1f;
+            font-size: 14px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgb(0 0 0 / 28%), 0 0 0 1px rgb(0 0 0 / 6%);
+        }
+
+        .mi {
+            position: relative;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            height: 32px;
+            padding: 0 16px 0 42px;
+        }
+
+        .mi.hover { background: #e8ebef; }
+
+        .mi.head { padding-left: 16px; font-weight: 600; }
+
+        .mi.head img { width: 16px; height: 16px; }
+
+        .mi.muted { color: #5f6368; }
+
+        .radio {
+            position: absolute;
+            left: 15px;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #5f6368;
+            border-radius: 50%;
+        }
+
+        .radio.on { border-color: #0b57d0; }
+
+        .radio.on::after {
+            position: absolute;
+            inset: 2px;
+            background: #0b57d0;
+            border-radius: 50%;
+            content: "";
+        }
+
+        .sep { height: 1px; margin: 6px 0; background: #e3e6ea; }
+
+        /* Keys, cursor, cards */
+
+        .keys { display: inline-flex; gap: 10px; align-items: center; vertical-align: middle; }
+
+        .key {
+            display: grid;
+            place-items: center;
+            min-width: 50px;
+            height: 50px;
+            padding: 0 14px;
+            color: #0f766e;
+            font-size: 21px;
+            font-weight: 750;
+            background: #fff;
+            border-radius: 11px;
+            box-shadow: 0 4px 0 rgb(0 0 0 / 22%);
+        }
+
+        .plus { font-size: 22px; font-weight: 700; opacity: 0.85; }
+
+        .cursor {
+            position: absolute;
+            z-index: 10;
+            width: 26px;
+            height: 26px;
+            margin: -2px 0 0 -4px;
+            filter: drop-shadow(0 2px 3px rgb(0 0 0 / 35%));
+        }
+
+        .ripple {
+            position: absolute;
+            z-index: 9;
+            width: 44px;
+            height: 44px;
+            margin: -22px 0 0 -22px;
+            border: 3px solid rgb(13 148 136 / 90%);
+            border-radius: 50%;
+        }
+
+        .brand { display: flex; gap: 22px; align-items: center; }
+
+        .wordmark { font-weight: 800; letter-spacing: -0.025em; line-height: 1; }
+
+        .caption {
+            position: absolute;
+            right: 0;
+            left: 0;
+            font-size: 38px;
+            font-weight: 750;
+            letter-spacing: -0.02em;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        const ICON = '../src/img/128.png';
+        const ICON_SMALL = '../src/img/32.png';
+
+        const GROUPS = {
+            work: { title: '1. Work', color: '#1a73e8', width: 68 },
+            trip: { title: '2. Trip', color: '#188038', width: 62 },
+            later: { title: '10. Later', color: '#a142f4', width: 78 },
+        };
+        const TABS = {
+            mail: { title: 'Mail', fav: ['#d93025', 'M'], pinned: true },
+            issue19: { title: 'Issue #19', fav: ['#24292f', '#'] },
+            issue2: { title: 'Issue #2', fav: ['#24292f', '#'] },
+            chat: { title: '(3) Team chat', fav: ['#8430ce', 'C'] },
+            hotels: { title: 'Lisbon hotels', fav: ['#e8710a', 'H'], group: 'trip' },
+            flights: { title: 'Lisbon flights', fav: ['#1967d2', 'F'], group: 'trip' },
+            report: { title: 'Weekly report', fav: ['#188038', 'R'], group: 'work' },
+            plan: { title: 'Project plan', fav: ['#0b57d0', 'P'], group: 'work' },
+            recipes: { title: 'Pasta recipes', fav: ['#c5221f', 'P'], group: 'later' },
+            movies: { title: 'Movie night', fav: ['#9334e6', 'M'], group: 'later' },
+            news: { title: 'Morning news', fav: ['#5f6368', 'N'] },
+        };
+
+        // Sorted by title: groups by name (natural numbers), then each group's tabs, then the rest.
+        const MESSY = ['mail', 'issue19', 'g:trip', 'hotels', 'flights', 'issue2', 'g:work', 'report', 'plan', 'chat'];
+        const SORTED = ['mail', 'g:work', 'plan', 'report', 'g:trip', 'flights', 'hotels', 'issue2', 'issue19', 'chat'];
+        const GROUPS_MESSY = ['g:later', 'recipes', 'movies', 'g:trip', 'hotels', 'flights', 'news', 'g:work', 'report', 'plan'];
+        const GROUPS_SORTED = ['g:work', 'plan', 'report', 'g:trip', 'flights', 'hotels', 'g:later', 'movies', 'recipes', 'news'];
+
+        const SVG = {
+            back: '<svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z" fill="currentColor"/></svg>',
+            forward: '<svg viewBox="0 0 24 24"><path d="M4 11h12.2l-5.6-5.6L12 4l8 8-8 8-1.4-1.4 5.6-5.6H4z" fill="currentColor"/></svg>',
+            reload: '<svg viewBox="0 0 24 24"><path d="M17.7 6.3A8 8 0 1 0 19.7 14h-2.1a6 6 0 1 1-1.4-6.2L13 11h7V4z" fill="currentColor"/></svg>',
+            puzzle: '<svg viewBox="0 0 24 24"><path d="M20.5 11H19V7a2 2 0 0 0-2-2h-4V3.5a2.5 2.5 0 0 0-5 0V5H4a2 2 0 0 0-2 2v3.8h1.5a2.7 2.7 0 0 1 0 5.4H2V20a2 2 0 0 0 2 2h3.8v-1.5a2.7 2.7 0 0 1 5.4 0V22H17a2 2 0 0 0 2-2v-4h1.5a2.5 2.5 0 0 0 0-5z" fill="currentColor"/></svg>',
+            more: '<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="19" r="2" fill="currentColor"/></svg>',
+            cursor: '<svg viewBox="0 0 24 24"><path d="M5 2.5v17.2l4.6-4.3 3 6.6 3-1.4-3-6.4h6.3z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+        };
+
+        const html = (strings, ...values) => strings.reduce((out, s, i) => out + s + (values[i] ?? ''), '');
+
+        function el(markup) {
+            const template = document.createElement('template');
+            template.innerHTML = markup.trim();
+            return template.content.firstElementChild;
+        }
+
+        const width = id => (id.startsWith('g:') ? GROUPS[id.slice(2)].width + 8 : TABS[id].pinned ? 44 : 136);
+
+        function layout(order) {
+            const x = {};
+            let end = 8;
+            for (const id of order) {
+                x[id] = id.startsWith('g:') ? end + 4 : end;
+                end += width(id);
+            }
+            x.newtab = end + 6;
+            return x;
+        }
+
+        /** A browser window whose tabs can glide between two orders: setProgress(0..1). */
+        function browser({ from, to = from, active, url, page = false, width: windowWidth }) {
+            const win = el(html`<div class="window" style="width:${windowWidth}px">
+                <div class="tabstrip"></div>
+                <div class="toolbar">
+                    <span class="btn">${SVG.back}</span><span class="btn">${SVG.forward}</span><span class="btn">${SVG.reload}</span>
+                    <div class="omnibox">${url}</div>
+                    <span class="btn">${SVG.puzzle}</span>
+                    <span class="btn ext"><img src="${ICON_SMALL}" alt=""></span>
+                    <span class="avatar"></span><span class="btn">${SVG.more}</span>
+                </div>
+                ${page === 'short' ? '<div class="viewport" style="height:64px;padding-top:20px"><div class="line" style="width:58%"></div><div class="line" style="width:34%"></div></div>' : ''}
+                ${page === true ? '<div class="viewport"><div class="line title"></div><div class="line" style="width:92%"></div><div class="line" style="width:84%"></div><div class="line" style="width:88%"></div><div class="line" style="width:61%"></div><div class="cards"><div></div><div></div><div></div></div></div>' : ''}
+            </div>`);
+            const strip = win.querySelector('.tabstrip');
+            const items = {};
+            for (const id of from) {
+                if (id.startsWith('g:')) {
+                    const group = GROUPS[id.slice(2)];
+                    items[id] = el(`<div class="item chip" style="--group:${group.color}">${group.title}</div>`);
+                } else {
+                    const tab = TABS[id];
+                    const group = tab.group ? GROUPS[tab.group] : null;
+                    const classes = ['item', 'tab', tab.pinned && 'pinned', group && 'grouped', id === active && 'active'].filter(Boolean).join(' ');
+                    items[id] = el(html`<div class="${classes}" style="${group ? `--group:${group.color}` : ''}">
+                        <span class="fav" style="background:${tab.fav[0]}">${tab.fav[1]}</span>${tab.pinned ? '' : `<span class="title">${tab.title}</span>`}
+                    </div>`);
+                }
+                strip.append(items[id]);
+            }
+            items.newtab = el('<div class="item newtab">+</div>');
+            strip.append(items.newtab);
+            const a = layout(from);
+            const b = layout(to);
+            const setProgress = p => {
+                const lift = Math.sin(Math.PI * p);
+                for (const [id, item] of Object.entries(items)) {
+                    const moving = a[id] !== b[id] && id !== 'newtab';
+                    item.style.transform = `translate(${a[id] + (b[id] - a[id]) * p}px, ${moving ? -3 * lift : 0}px)`;
+                    item.style.setProperty('--lift', moving ? lift : 0);
+                    // Tabs travelling furthest pass over the others.
+                    item.style.zIndex = moving ? Math.round(Math.abs(b[id] - a[id]) * lift) : 0;
+                }
+            };
+            setProgress(0);
+            return { el: win, setProgress, ext: win.querySelector('.ext') };
+        }
+
+        function menu() {
+            return el(html`<div class="menu">
+                <div class="mi head"><img src="${ICON_SMALL}" alt="">Neat Tab Sorter</div>
+                <div class="sep"></div>
+                <div class="mi undo">Undo last sort</div>
+                <div class="sep"></div>
+                <div class="mi"><span class="radio on"></span>Sort by title</div>
+                <div class="mi"><span class="radio"></span>Sort by URL</div>
+                <div class="mi"><span class="radio"></span>Sort by site (custom)</div>
+                <div class="mi"><span class="radio"></span>Sort by recently used</div>
+                <div class="sep"></div>
+                <div class="mi muted">Options</div>
+                <div class="mi muted">Unpin</div>
+                <div class="mi muted">Manage extension</div>
+            </div>`);
+        }
+
+        const keys = (...names) => `<span class="keys">${names.map(n => `<span class="key">${n}</span>`).join('<span class="plus">+</span>')}</span>`;
+
+        function badge(size) {
+            const bars = [[4, 4], [7, 7], [10, 10]].map(([y, length]) => `<rect x="3" y="${y}" width="${length}" height="2" rx="1" fill="#0f766e"/>`).join('');
+            return `<svg width="${size}" height="${size}" viewBox="0 0 16 16" style="flex:none;filter:drop-shadow(0 ${size / 12}px ${size / 6}px rgb(0 0 0 / 28%))"><rect width="16" height="16" rx="3.5" fill="#fff"/>${bars}</svg>`;
+        }
+
+        function brand(size, wordSize) {
+            return html`<div class="brand">${badge(size)}<div class="wordmark" style="font-size:${wordSize}px">Neat Tab Sorter</div></div>`;
+        }
+
+        // --- Scenes -----------------------------------------------------------------------------
+
+        const scene = el('<div class="scene"></div>');
+        document.body.append(scene);
+        const place = (node, css) => { Object.assign(node.style, { position: 'absolute', ...css }); scene.append(node); return node; };
+
+        const scenes = {
+            hero() {
+                place(el(`<div><h1 class="headline">Sort every tab in one click</h1><p class="sub">Tab groups stay intact &nbsp;·&nbsp; Undo anytime &nbsp;·&nbsp; Numbers sort naturally</p></div>`), { left: '48px', top: '56px' });
+                const before = browser({ from: MESSY, active: 'issue2', url: '<b>tracker.example</b>/issues/2', page: 'short', width: 1184 });
+                const after = browser({ from: SORTED, active: 'issue2', url: '<b>tracker.example</b>/issues/2', page: 'short', width: 1184 });
+                place(el('<div class="label">Before</div>'), { left: '48px', top: '206px' });
+                place(before.el, { left: '48px', top: '242px' });
+                place(el('<div class="label">After &nbsp;·&nbsp; sorted by title</div>'), { left: '48px', top: '434px' });
+                place(after.el, { left: '48px', top: '470px' });
+                place(el(`<p class="sub" style="font-size:19px">Pinned tabs stay put. Groups come first, in name order. Everything else is sorted, and "(3)" unread counters are ignored.</p>`), { left: '48px', top: '676px', width: '1184px' });
+            },
+            groups() {
+                place(el(`<div><h1 class="headline">Tab groups stay intact</h1><p class="sub">Number your groups to choose their order: 2 comes before 10.</p></div>`), { left: '48px', top: '56px' });
+                const before = browser({ from: GROUPS_MESSY, active: 'news', url: '<b>news.example</b>/today', page: 'short', width: 1184 });
+                const after = browser({ from: GROUPS_SORTED, active: 'news', url: '<b>news.example</b>/today', page: 'short', width: 1184 });
+                place(el('<div class="label">Before</div>'), { left: '48px', top: '206px' });
+                place(before.el, { left: '48px', top: '242px' });
+                place(el('<div class="label">After</div>'), { left: '48px', top: '434px' });
+                place(after.el, { left: '48px', top: '470px' });
+                place(el(`<p class="sub" style="font-size:19px">Prefer your own group order, or want grouped tabs left alone? There's a setting for each. Split views are never pulled apart.</p>`), { left: '48px', top: '676px', width: '1184px' });
+            },
+            menu() {
+                place(el(`<div><h1 class="headline">Undo, sort orders and a shortcut</h1><p class="sub">Right-click the icon to undo or pick a sort order, or sort with ${keys('Alt', 'Shift', 'S')}</p></div>`), { left: '48px', top: '56px' });
+                const win = browser({ from: SORTED, active: 'issue2', url: '<b>tracker.example</b>/issues/2', page: true, width: 1184 });
+                place(win.el, { left: '48px', top: '250px' });
+                win.ext.classList.add('pressed');
+                const icon = win.ext.getBoundingClientRect();
+                const m = place(menu(), { left: `${icon.left + icon.width / 2 - 272}px`, top: `${icon.top + icon.height / 2 + 2}px` });
+                const undo = m.querySelector('.undo');
+                undo.classList.add('hover');
+                const undoBox = undo.getBoundingClientRect();
+                place(el(`<div class="cursor">${SVG.cursor}</div>`), { left: `${undoBox.left + 150}px`, top: `${undoBox.top + 12}px` });
+            },
+            'promo-small'() {
+                const node = place(el(brand(84, 30)), { left: '0', right: '0', top: '0', bottom: '0', flexDirection: 'column', justifyContent: 'center', gap: '18px' });
+                node.querySelector('.wordmark').style.textShadow = '0 2px 12px rgb(0 0 0 / 20%)';
+            },
+            marquee() {
+                place(el(`<div>${brand(120, 64)}<p class="sub" style="font-size:26px;margin-top:26px">One click. Tidy tabs. Groups stay intact.</p></div>`), { left: '96px', top: '170px' });
+                const win = browser({ from: SORTED, active: 'issue2', url: '<b>tracker.example</b>/issues/2', page: true, width: 760 });
+                win.el.style.transform = 'scale(1.18)';
+                win.el.style.transformOrigin = 'top left';
+                place(win.el, { left: '720px', top: '120px' });
+            },
+            video() {
+                // 1280x720, 15 seconds. render(t) draws the frame at time t (in seconds).
+                const win = browser({ from: MESSY, to: SORTED, active: 'issue2', url: '<b>tracker.example</b>/issues/2', page: true, width: 1184 });
+                place(win.el, { left: '48px', top: '150px' });
+                const captions = [
+                    [0.2, 2.1, 'Tabs all over the place?'],
+                    [2.2, 4.9, 'One click: sorted. Groups stay intact.'],
+                    [5.0, 8.5, 'Changed your mind? Undo.'],
+                    [8.6, 11.5, `Or press ${keys('Alt', 'Shift', 'S')}`],
+                ].map(([start, end, text]) => ({ start, end, node: place(el(`<div class="caption">${text}</div>`), { top: '44px' }) }));
+                const cursor = place(el(`<div class="cursor">${SVG.cursor}</div>`), {});
+                const ripple = place(el('<div class="ripple"></div>'), {});
+                const icon = win.ext.getBoundingClientRect();
+                const iconCenter = [icon.left + icon.width / 2, icon.top + icon.height / 2];
+                const m = place(menu(), { left: `${iconCenter[0] - 272}px`, top: `${iconCenter[1] + 2}px`, transformOrigin: 'top right' });
+                const undoItem = m.querySelector('.undo');
+                const undoBox = undoItem.getBoundingClientRect();
+                const undoPoint = [undoBox.left + 150, undoBox.top + undoBox.height / 2];
+                const end = place(el(`<div style="display:flex;flex-direction:column;align-items:center;gap:26px">${brand(132, 72)}<p class="sub" style="font-size:26px;margin:0">Free &nbsp;·&nbsp; Open source &nbsp;·&nbsp; No tracking</p></div>`),
+                    { inset: '0', justifyContent: 'center', display: 'flex', background: 'inherit' });
+                end.style.background = getComputedStyle(scene).background;
+
+                const clamp = x => Math.min(1, Math.max(0, x));
+                const ease = x => (x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2);
+                const span = (t, a, b) => ease(clamp((t - a) / (b - a)));
+                const mix = (a, b, p) => a + (b - a) * p;
+                const clicks = [[2.0, iconCenter], [5.0, iconCenter], [6.1, undoPoint]];
+
+                window.render = t => {
+                    win.setProgress(span(t, 2.2, 3.2) - span(t, 6.3, 7.3) + span(t, 9.0, 10.0));
+                    for (const c of captions) c.node.style.opacity = Math.min(span(t, c.start, c.start + 0.3), 1 - span(t, c.end - 0.3, c.end));
+
+                    const start = [700, 560];
+                    const parked = [880, 520];
+                    let [x, y] = start;
+                    const toIcon = span(t, 1.2, 1.9);
+                    [x, y] = [mix(start[0], iconCenter[0], toIcon), mix(start[1], iconCenter[1], toIcon)];
+                    const toUndo = span(t, 5.4, 5.95);
+                    [x, y] = [mix(x, undoPoint[0], toUndo), mix(y, undoPoint[1], toUndo)];
+                    const away = span(t, 6.4, 7.4);
+                    [x, y] = [mix(x, parked[0], away), mix(y, parked[1], away)];
+                    cursor.style.transform = `translate(${x}px, ${y}px)`;
+                    cursor.style.opacity = 1 - span(t, 11.3, 11.6);
+
+                    win.ext.classList.toggle('pressed', (t >= 1.95 && t < 2.25) || (t >= 4.95 && t < 6.2));
+                    const menuIn = span(t, 5.0, 5.18) * (1 - span(t, 6.12, 6.25));
+                    m.style.opacity = menuIn;
+                    m.style.transform = `scale(${0.96 + 0.04 * menuIn})`;
+                    undoItem.classList.toggle('hover', t >= 5.8 && t < 6.2);
+
+                    const click = clicks.find(([time]) => t >= time && t < time + 0.45);
+                    ripple.style.opacity = click ? 1 - (t - click[0]) / 0.45 : 0;
+                    if (click) ripple.style.transform = `translate(${click[1][0]}px, ${click[1][1]}px) scale(${0.4 + (t - click[0]) * 1.6})`;
+
+                    end.style.opacity = span(t, 11.6, 12.2);
+                };
+                window.render(0);
+            },
+        };
+
+        const sceneName = new URLSearchParams(location.search).get('scene') || 'hero';
+        scenes[sceneName]();
+        window.ready = Promise.all([...document.images].map(img => img.decode().catch(() => {}))).then(() => document.fonts.ready);
+    </script>
+</body>
+
+</html>

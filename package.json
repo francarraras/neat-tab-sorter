@@ -1,8 +1,14 @@
 {
-    "name": "simple-tab-sorter",
+    "name": "neat-tab-sorter",
     "private": true,
     "type": "module",
     "scripts": {
-        "test": "node --test \"test/*.test.js\""
+        "test": "node --test \"test/*.test.js\"",
+        "test:e2e": "node --test test/browser.e2e.js",
+        "assets": "node store/make-assets.mjs",
+        "package": "sh package_for_web_store.sh"
+    },
+    "devDependencies": {
+        "playwright": "1.52.0"
     }
 }

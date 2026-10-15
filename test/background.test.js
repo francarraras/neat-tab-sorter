@@ -59,7 +59,6 @@ globalThis.chrome = {
     runtime: {
         onInstalled: event('runtime.onInstalled'),
         OnInstalledReason: { INSTALL: 'install', UPDATE: 'update' },
-        setUninstallURL: url => { browser.uninstallUrl = url; },
     },
     storage: { onChanged: event('storage.onChanged'), sync: storageArea('sync'), session: storageArea('session') },
     windows: { onRemoved: event('windows.onRemoved'), getLastFocused: async () => ({ id: WINDOW_ID }) },
@@ -105,7 +104,6 @@ test('installing creates the menu and opens the user guide', async () => {
     assert.deepEqual([...browser.menus.keys()], ['undo', 'separator', 'sortBy:title', 'sortBy:url', 'sortBy:custom', 'sortBy:lastAccessed']);
     assert.equal(browser.menus.get('sortBy:url').checked, true);
     assert.deepEqual(browser.openedTabs, ['userguide.html']);
-    assert.match(browser.uninstallUrl, /^https:\/\/docs\.google\.com\/forms\//);
 });
 
 test('clicking the icon sorts the window, and "Undo last sort" restores it', async () => {

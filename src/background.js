@@ -1,7 +1,6 @@
 import { forgetWindow, sortWindow, undoSort } from './engine.js';
 import { loadSettings } from './settings.js';
 
-const UNINSTALL_FEEDBACK_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe-r_WFNry_KZCwOjdMjDjiS8sEIWmmwY-3hbSmIYV393RLCA/viewform';
 const UNDO_MENU_ID = 'undo';
 const SORT_BY_MENU_PREFIX = 'sortBy:';
 const SORT_BY_MENU_TITLES = {
@@ -15,7 +14,7 @@ const SORT_BY_MENU_TITLES = {
 // two runs in the same window.
 let queue = Promise.resolve();
 function enqueue(task) {
-    queue = queue.then(task).catch(error => console.error('Simple Tab Sorter:', error));
+    queue = queue.then(task).catch(error => console.error('Neat Tab Sorter:', error));
     return queue;
 }
 
@@ -53,15 +52,8 @@ chrome.storage.onChanged.addListener((changes, area) => {
 chrome.windows.onRemoved.addListener(forgetWindow);
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
-    createMenus().catch(error => console.error('Simple Tab Sorter:', error));
-    if (reason === chrome.runtime.OnInstalledReason.INSTALL) {
-        // Ask for (optional) uninstall feedback, to see if there's room for improvement.
-        chrome.runtime.setUninstallURL(UNINSTALL_FEEDBACK_URL);
-        chrome.tabs.create({ url: 'userguide.html' });
-    } else if (reason === chrome.runtime.OnInstalledReason.UPDATE) {
-        // Flags used by the welcome popup of versions before 0.5.0.
-        chrome.storage.sync.remove(['installedVersion', 'newInstall', 'newUpdate']);
-    }
+    createMenus().catch(error => console.error('Neat Tab Sorter:', error));
+    if (reason === chrome.runtime.OnInstalledReason.INSTALL) chrome.tabs.create({ url: 'userguide.html' });
 });
 
 // Items on the toolbar icon's right-click menu (Chrome allows up to 6).

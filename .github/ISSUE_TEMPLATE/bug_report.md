@@ -1,9 +1,9 @@
 ---
 name: Bug report
-about: Create a report to help me improve
+about: Report something that isn't working
 title: "[BUG] Bug report title..."
 labels: ''
-assignees: pwhite2
+assignees: francarraras
 
 ---
 
@@ -26,7 +26,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Desktop/Browser/Extension Info (please complete the following information):**
- - Simple Tab Sorter Version: [e.g. 0.1.0]
+ - Neat Tab Sorter version (shown on its About page): [e.g. 1.0.0]
  - Browser: [e.g. chrome, brave, vivaldi]
  - Version: [e.g. 80.0.3987.132, 1.4.95]
  - OS: [e.g. Windows 10, MacOS 10.15.3]
