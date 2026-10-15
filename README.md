@@ -18,7 +18,7 @@
 ## Why you'll like it
 
 - **Your order, as the default.** Sort by title, URL, site or recent use. Pick one from the toolbar icon's right-click menu and every click and shortcut uses it from then on, synced across your computers.
-- **Fast.** It plans the whole window first, then moves only the tabs that are out of place. 150 shuffled tabs sort in about 0.1 s, and sorting a window that's already sorted doesn't move a thing.
+- **Fast.** It plans the whole window first, then moves only the tabs that are out of place. On a laptop, 150 shuffled tabs sort in about a tenth of a second, and sorting a window that's already sorted doesn't move a thing.
 - **Exact.** It never misses: tab groups stay intact, split views stay together, pinned tabs stay put, and "Issue #2" comes before "Issue #19". If you open, close or drag a tab mid-sort, it notices and finishes the job. And **Undo** puts every tab back exactly where it was.
 
 ## Sort orders
