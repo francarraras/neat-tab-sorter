@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/francarraras/neat-tab-sorter/discussions
+    about: Ask a question or talk an idea through before filing it.
+  - name: Security problem
+    url: https://github.com/francarraras/neat-tab-sorter/security/advisories/new
+    about: Report security problems privately, not in public issues.

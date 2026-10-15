@@ -1,0 +1,39 @@
+name: Release
+
+# Push a tag like v1.1.0 (matching the version in src/manifest.json) to publish a GitHub release
+# with the Chrome Web Store zip attached.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - name: Check the tag matches the manifest version
+        run: |
+          version=$(node -p "require('./src/manifest.json').version")
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME doesn't match version $version in src/manifest.json"
+            exit 1
+          fi
+      - run: npm ci
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - run: npm run package
+      - name: Create the release, with this version's CHANGELOG.md section as notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=${GITHUB_REF_NAME#v}
+          awk -v heading="## [$version]" 'index($0, "## [") == 1 { on = index($0, heading) == 1; next } on' CHANGELOG.md > notes.md
+          gh release create "$GITHUB_REF_NAME" "dist/neat-tab-sorter-v$version.zip" --title "Neat Tab Sorter $version" --notes-file notes.md

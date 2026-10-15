@@ -1,0 +1,51 @@
+name: Bug report
+description: Something doesn't work as expected.
+labels: [bug, needs triage]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting! Please check the [existing issues](https://github.com/francarraras/neat-tab-sorter/issues?q=is%3Aissue) first.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open a window with ...
+        2. Click the Neat Tab Sorter icon
+        3. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: sort-order
+    attributes:
+      label: Sort order
+      options: [Title, URL, Custom (group by site), Recently used]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Neat Tab Sorter version
+      description: Shown on the extension's About page.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and operating system
+      placeholder: Chrome 141 on macOS 15
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Anything else?
+      description: Were tab groups, pinned tabs, split views or a tab suspender involved? Screenshots help a lot.

@@ -1,0 +1,19 @@
+# Monthly pull requests to keep the development tools up to date; CI tests each one.
+# (The extension itself has no dependencies.)
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+  - package-ecosystem: npm
+    directory: /media
+    schedule:
+      interval: monthly
+    groups:
+      remotion:
+        patterns: [remotion, "@remotion/*", react, react-dom]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
