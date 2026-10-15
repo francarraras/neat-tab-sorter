@@ -6,7 +6,7 @@ import {
     BrowserWindow, Brand, ContextMenu, Cursor, EXTENSION_BUTTON_INSET, Keys, MENU_WIDTH, Place, Ripple,
     TABSTRIP_HEIGHT, TOOLBAR_HEIGHT, menuItemPoint,
 } from './components.jsx';
-import { DEMO_BY_TITLE, DEMO_BY_URL, DEMO_MESSY } from './data.js';
+import { DEMO_BY_TITLE, DEMO_BY_URL, DEMO_MESSY, movedBySort, movedByUndo } from './data.js';
 
 export const DEMO_SECONDS = 14;
 
@@ -23,18 +23,21 @@ const onMenu = id => {
 };
 const REST = { x: 760, y: 610 };
 
+// Each sort, and the badge the icon shows afterwards (the real number of tabs moved) until `until`.
+const SORT_COLOR = '#0d9488';
+const UNDO_COLOR = '#5f6368';
 const SORTS = [
-    { at: 1.55, from: DEMO_MESSY, to: DEMO_BY_TITLE }, // click
-    { at: 4.7, from: DEMO_BY_TITLE, to: DEMO_BY_URL }, // menu: Sort by URL
-    { at: 7.8, from: DEMO_BY_URL, to: DEMO_BY_TITLE }, // menu: Undo last sort
-    { at: 9.9, from: DEMO_BY_TITLE, to: DEMO_BY_URL }, // shortcut, with URL now the default
+    { at: 1.55, until: 3.55, from: DEMO_MESSY, to: DEMO_BY_TITLE, moved: movedBySort(DEMO_MESSY, 'title'), color: SORT_COLOR }, // click
+    { at: 4.7, until: 6.85, from: DEMO_BY_TITLE, to: DEMO_BY_URL, moved: movedBySort(DEMO_BY_TITLE, 'url'), color: SORT_COLOR }, // menu: Sort by URL
+    { at: 7.8, until: 9.35, from: DEMO_BY_URL, to: DEMO_BY_TITLE, moved: movedByUndo(DEMO_BY_URL, DEMO_BY_TITLE), color: UNDO_COLOR }, // menu: Undo last sort
+    { at: 9.9, until: 11.55, from: DEMO_BY_TITLE, to: DEMO_BY_URL, moved: movedBySort(DEMO_BY_TITLE, 'url'), color: SORT_COLOR }, // shortcut, with URL now the default
 ];
 const GLIDE_SECONDS = 0.5;
 const END_CARD = { in: 11.6, out: 13.6 };
 
 const CAPTIONS = [
     { start: 0.15, end: 1.5, title: 'Messy tabs?' },
-    { start: 1.6, end: 3.55, title: 'One click. Sorted instantly.', sub: 'Groups stay intact, “Issue #2” comes before “Issue #19”, and “(3)” is ignored.' },
+    { start: 1.6, end: 3.55, title: 'One click. Sorted instantly.', sub: 'Only tabs that were out of place move, and the icon shows how many.' },
     { start: 3.65, end: 6.85, title: 'Pick your favorite order.', sub: 'It becomes your default, right from the toolbar icon.' },
     { start: 6.95, end: 9.3, title: 'Changed your mind? Undo.', sub: 'Every tab goes back exactly where it was.' },
     { start: 9.4, end: 11.5, title: <>Or press <Keys names={['Alt', 'Shift', 'S']} /></>, sub: 'Sorts with your default order.' },
@@ -47,8 +50,10 @@ const MENUS = [
 const PRESSED = [[1.4, 1.6], [3.55, 4.6], [6.85, 7.7]];
 
 // The pointer moves between these [time, position] points.
+const NEAR_BUTTON = { x: BUTTON.x - 70, y: BUTTON.y + 85 }; // out of the badge's way
 const POINTER = [
-    [0, REST], [0.9, REST], [1.4, BUTTON], [3.6, BUTTON], [4.25, onMenu('url')], [4.45, onMenu('url')],
+    [0, REST], [0.9, REST], [1.4, BUTTON], [1.7, BUTTON], [2.1, NEAR_BUTTON], [3.2, NEAR_BUTTON], [3.6, BUTTON],
+    [4.25, onMenu('url')], [4.45, onMenu('url')],
     [4.95, { x: 900, y: 560 }], [6.4, { x: 900, y: 560 }], [6.9, BUTTON], [7.45, onMenu('undo')], [7.65, onMenu('undo')],
     [8.2, { x: 880, y: 600 }],
 ];
@@ -75,8 +80,12 @@ export function Demo({ flat }) {
     const t = frame / fps;
 
     let tabs = { from: DEMO_MESSY, to: DEMO_MESSY, glide: 0 };
+    let badge;
     for (const sort of SORTS) {
-        if (t >= sort.at) tabs = { from: sort.from, to: sort.to, glide: progress(t, sort.at, sort.at + GLIDE_SECONDS) };
+        if (t < sort.at) continue;
+        tabs = { from: sort.from, to: sort.to, glide: progress(t, sort.at, sort.at + GLIDE_SECONDS) };
+        const shown = visibility(t, sort.at + GLIDE_SECONDS - 0.05, sort.until, 0.15);
+        badge = shown > 0 ? { text: String(sort.moved), color: sort.color, shown } : undefined;
     }
     // Back to the messy window behind the end card, so the loop starts over seamlessly.
     if (t >= END_CARD.in + 0.5) tabs = { from: DEMO_MESSY, to: DEMO_MESSY, glide: 0 };
@@ -105,6 +114,7 @@ export function Demo({ flat }) {
                     page="full"
                     width={WINDOW.width}
                     extensionPressed={PRESSED.some(([start, end]) => t >= start && t < end)}
+                    badge={badge}
                 />
             </Place>
             {menu && (

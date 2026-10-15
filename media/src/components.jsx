@@ -51,7 +51,7 @@ export function Place({ x, y, zoom = 1, style, children }) {
 }
 
 /** A browser window whose tabs glide from one order to another as `progress` goes from 0 to 1. */
-export function BrowserWindow({ from, to = from, progress = 0, active, url, page = 'none', width, extensionPressed = false }) {
+export function BrowserWindow({ from, to = from, progress = 0, active, url, page = 'none', width, extensionPressed = false, badge }) {
     const items = stripItems(from);
     const start = layout(items);
     const end = layout(stripItems(to));
@@ -84,7 +84,14 @@ export function BrowserWindow({ from, to = from, progress = 0, active, url, page
                 <span className="btn"><ReloadIcon /></span>
                 <div className="omnibox"><b>{url.slice(0, slash)}</b>{url.slice(slash)}</div>
                 <span className="btn"><PuzzleIcon /></span>
-                <span className={`btn${extensionPressed ? ' pressed' : ''}`}><Badge size={18} /></span>
+                <span className={`btn${extensionPressed ? ' pressed' : ''}`}>
+                    <Badge size={18} />
+                    {badge && (
+                        <span className="badge" style={{ background: badge.color, opacity: badge.shown, transform: `scale(${0.6 + 0.4 * badge.shown})` }}>
+                            {badge.text}
+                        </span>
+                    )}
+                </span>
                 <span className="avatar" />
                 <span className="btn"><MoreIcon /></span>
             </div>
